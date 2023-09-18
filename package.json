@@ -1,0 +1,17 @@
+{
+  "name": "cdb",
+  "version": "0.0.0",
+  "description": "",
+  "license": "UNLICENSED",
+  "keywords": [],
+  "private": "true",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "build": "pnpm -r build"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.3",
+    "@types/node": "^20.6.2",
+    "typescript": "~5.2.2"
+  }
+}
