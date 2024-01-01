@@ -1,0 +1,88 @@
+dsn: ${TBLS_DATABASE_URL}?sslmode=disable
+
+name: cbd
+docPath: docs/db
+exclude:
+  - _prisma_migrations
+
+format:
+  adjust: true
+
+lint:
+  requireTableComment:
+    enabled: true
+  requireColumnComment:
+    enabled: true
+    exclude:
+      - id
+      - created_at
+      - updated_at
+  requireColumns:
+    enabled: true
+    columns:
+      - name: created_at
+      - name: updated_at
+
+comments:
+  - table: public.beans
+    tableComment: Whole beans
+    columnComments:
+      id: Whole bean ID
+      name: Whole bean name
+      description: Whole bean description
+      roast_level_id: Roast level ID
+      origin_id: Origin ID
+      processing_method_id: Processing method ID
+
+  - table: public.origins
+    tableComment: Coffee origins
+    columnComments:
+      id: Coffee origin ID
+      name: Coffee origin name
+      description: Coffee origin description
+      longitude: Coffee origin longitude
+      latitude: Coffee origin latitude
+
+  - table: public.roast_levels
+    tableComment: Coffee roast levels
+    columnComments:
+      id: Coffee roast level ID
+      name: Coffee roast level name
+      description: Coffee roast level description
+
+  - table: public.processing_methods
+    tableComment: Coffee processing methods
+    columnComments:
+      id: Coffee processing method ID
+      name: Coffee processing method name
+      description: Coffee processing method description
+
+  - table: public.flavor_profiles
+    tableComment: Coffee flavor profiles
+    columnComments:
+      id: Coffee flavor profile ID
+      value: Coffee flavor profile value
+      label: Coffee flavor profile label
+      description: Coffee flavor profile description
+
+  - table: public.bean_flavor_profiles
+    tableComment: Bean flavor profiles relationship
+    columnComments:
+      bean_id: Bean ID
+      flavor_profile_id: Flavor profile ID
+
+  - table: public.tastings
+    tableComment: Coffee tasting
+    columnComments:
+      id: Coffee tasting ID
+      name: Coffee tasting name
+      description: Coffee tasting description
+      acidity: Coffee tasting acidity
+      richness: Coffee tasting richness
+      conducted_at: Coffee tasting conducted at
+
+  - table: public.bean_tastings
+    tableComment: Bean tastings relationship
+    columnComments:
+      bean_id: Bean ID
+      tasting_id: Tasting ID

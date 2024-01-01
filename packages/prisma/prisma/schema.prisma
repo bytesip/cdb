@@ -1,136 +1,141 @@
 generator client {
-    provider      = "prisma-client-js"
-    binaryTargets = ["native"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-// 焙煎済みの豆の意 not raw beans
 model Bean {
-    id                    String                  @id @default(cuid())
-    name                  String
-    createdAt             DateTime                @default(now()) @map("created_at")
-    updatedAt             DateTime                @updatedAt @map("updated_at")
-    beansOrigins          BeansOrigin[]
-    beansRoastLevels      BeansRoastLevel[]
-    BeansProcessingMethod BeansProcessingMethod[]
-    BeansTastings         BeansTastings[]
+  id                 String             @id @default(cuid())
+  name               String
+  description        String?
+  originId           String             @map("origin_id")
+  origin             Origin             @relation(fields: [originId], references: [id])
+  roastLevelId       String             @map("roast_level_id")
+  roastLevel         RoastLevel         @relation(fields: [roastLevelId], references: [id])
+  processingMethodId String             @map("processing_method_id")
+  processingMethod   ProcessingMethod   @relation(fields: [processingMethodId], references: [id])
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+  beanFlavorProfile  BeanFlavorProfile?
+  beanTastings       BeanTastings[]
 
-    @@map("beans")
+  @@map("beans")
 }
 
-model Orign {
-    id           String        @id @default(cuid())
-    name         String        @unique
-    description  String
-    longitude    Float?
-    latitude     Float?
-    createdAt    DateTime      @default(now()) @map("created_at")
-    updatedAt    DateTime      @updatedAt @map("updated_at")
-    beansOrigins BeansOrigin[]
+model Origin {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  longitude   Float?
+  latitude    Float?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  beans       Bean[]
 
-    @@map("origns")
-}
-
-model BeansOrigin {
-    beanId    String   @map("bean_id")
-    bean      Bean     @relation(fields: [beanId], references: [id])
-    originId  String   @map("origin_id")
-    origin    Orign    @relation(fields: [originId], references: [id])
-    createdAt DateTime @default(now()) @map("created_at")
-    updatedAt DateTime @updatedAt @map("updated_at")
-
-    @@id([beanId, originId])
-    @@map("beans_origins")
+  @@map("origins")
 }
 
 model RoastLevel {
-    id               String            @id @default(cuid())
-    name             String            @unique
-    description      String
-    createdAt        DateTime          @default(now()) @map("created_at")
-    updatedAt        DateTime          @updatedAt @map("updated_at")
-    beansRoastLevels BeansRoastLevel[]
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  beans       Bean[]
 
-    @@map("roast_levels")
-}
-
-model BeansRoastLevel {
-    beanId       String     @map("bean_id")
-    bean         Bean       @relation(fields: [beanId], references: [id])
-    roastLevelId String     @map("roast_level_id")
-    roastLevel   RoastLevel @relation(fields: [roastLevelId], references: [id])
-    createdAt    DateTime   @default(now()) @map("created_at")
-    updatedAt    DateTime   @updatedAt @map("updated_at")
-
-    @@id([beanId, roastLevelId])
-    @@map("beans_roast_levels")
+  @@map("roast_levels")
 }
 
 model ProcessingMethod {
-    id                    String                  @id @default(cuid())
-    name                  String                  @unique
-    description           String
-    createdAt             DateTime                @default(now()) @map("created_at")
-    updatedAt             DateTime                @updatedAt @map("updated_at")
-    BeansProcessingMethod BeansProcessingMethod[]
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  beans       Bean[]
 
-    @@map("processing_methods")
+  @@map("processing_methods")
 }
 
-model BeansProcessingMethod {
-    beanId             String           @map("bean_id")
-    bean               Bean             @relation(fields: [beanId], references: [id])
-    processingMethodId String           @map("processing_method_id")
-    processingMethod   ProcessingMethod @relation(fields: [processingMethodId], references: [id])
-    createdAt          DateTime         @default(now()) @map("created_at")
-    updatedAt          DateTime         @updatedAt @map("updated_at")
-
-    @@id([beanId, processingMethodId])
-    @@map("beans_processing_methods")
-}
-
-// これは木構造を持つ
+// ref: https://notbadcoffee.com/flavor-wheel-en/
 model FlavorProfile {
-    id        String   @id @default(cuid())
-    name      String   @unique
-    createdAt DateTime @default(now()) @map("created_at")
-    updatedAt DateTime @updatedAt @map("updated_at")
-    Tasting   Tasting? @relation(fields: [tastingId], references: [id])
-    tastingId String?
+  id                 String              @id @default(cuid())
+  value              String              @unique
+  label              String
+  description        String?
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  beanFlavorProfiles BeanFlavorProfile[]
 
-    @@map("flavor_profiles")
+  @@map("flavor_profiles")
+}
+
+model BeanFlavorProfile {
+  id              String        @id @default(cuid())
+  beanId          String        @unique @map("bean_id")
+  bean            Bean          @relation(fields: [beanId], references: [id])
+  flavorProfileId String        @map("flavor_profile_id")
+  flavorProfile   FlavorProfile @relation(fields: [flavorProfileId], references: [id])
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  @@map("bean_flavor_profiles")
 }
 
 model Tasting {
-    id              String          @id @default(cuid())
-    name            String          @unique
-    description     String
-    acidity         Int
-    richness        Int
-    flavorPorfileId String          @map("flavor_profile_id")
-    flavorProfiles  FlavorProfile[]
-    BeansTastings   BeansTastings[]
-    createdAt       DateTime        @default(now()) @map("created_at")
-    updatedAt       DateTime        @updatedAt @map("updated_at")
+  id           String         @id @default(cuid())
+  name         String         @unique
+  description  String
+  acidity      Int
+  richness     Int
+  conductedAt  DateTime       @map("conducted_at")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  beanTastings BeanTastings[]
 
-    @@map("tastings")
+  @@map("tastings")
 }
 
-model BeansTastings {
-    tastingId String   @id @map("tasting_id")
-    tasting   Tasting  @relation(fields: [tastingId], references: [id])
-    beanId    String   @map("bean_id")
-    bean      Bean     @relation(fields: [beanId], references: [id])
-    createdAt DateTime @default(now()) @map("created_at")
-    updatedAt DateTime @updatedAt @map("updated_at")
+model BeanTastings {
+  tastingId String   @id @map("tasting_id")
+  tasting   Tasting  @relation(fields: [tastingId], references: [id])
+  beanId    String   @unique @map("bean_id")
+  bean      Bean     @relation(fields: [beanId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-    @@map("beans_tastings")
+  @@map("bean_tastings")
 }
 
+model Shop {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  ShopLocation ShopLocation?
+
+  @@map("shops")
+}
+
+model ShopLocation {
+  id         String   @id @default(cuid())
+  shopId     String   @unique @map("shop_id")
+  shop       Shop     @relation(fields: [shopId], references: [id])
+  longitude  Float?
+  latitude   Float?
+  postalCode String?  @map("postal_code")
+  prefecture String?  @map("prefecture")
+  city       String?  @map("city")
+  address    String?  @map("address")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("shop_locations")
+}
 
 // 店舗
 // 購入日

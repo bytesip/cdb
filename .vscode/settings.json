@@ -1,6 +1,9 @@
 {
     "cSpell.words": [
-        "preinstall"
+        "posttbls",
+        "preinstall",
+        "sslmode",
+        "tbls"
     ],
     "deno.enable": true
 }
