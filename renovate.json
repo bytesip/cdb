@@ -1,0 +1,37 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["local>sheinc/renovate-config"],
+    "packageRules": [
+      {
+        "matchUpdateTypes": ["minor", "patch", "pin"],
+        "automerge": true,
+        "excludePackageNames": ["@graphql-yoga/node"]
+      },
+      {
+        "matchPackageNames": [
+          "@next/eslint-plugin-next",
+          "@typescript-eslint/eslint-plugin",
+          "eslint",
+          "eslint-config-standard-jsx",
+          "eslint-config-standard-react",
+          "eslint-config-standard-with-typescript",
+          "eslint-import-resolver-typescript",
+          "eslint-plugin-compat",
+          "eslint-plugin-eslint-comments",
+          "eslint-plugin-import",
+          "eslint-plugin-jest",
+          "eslint-plugin-jest-dom",
+          "eslint-plugin-jest-formatting",
+          "eslint-plugin-json-format",
+          "eslint-plugin-jsx-a11y",
+          "eslint-plugin-node",
+          "eslint-plugin-promise",
+          "eslint-plugin-react",
+          "eslint-plugin-react-hooks",
+          "eslint-plugin-security",
+          "eslint-plugin-testing-library"
+        ],
+        "enabled": false
+      }
+    ]
+  }
