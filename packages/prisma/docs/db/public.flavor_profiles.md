@@ -6,14 +6,14 @@ Coffee flavor profiles
 
 ## Columns
 
-| Name        | Type                           | Default           | Nullable | Children                                                      | Parents | Comment                           |
-| ----------- | ------------------------------ | ----------------- | -------- | ------------------------------------------------------------- | ------- | --------------------------------- |
-| id          | text                           |                   | false    | [public.bean_flavor_profiles](public.bean_flavor_profiles.md) |         | Coffee flavor profile ID          |
-| value       | text                           |                   | false    |                                                               |         | Coffee flavor profile value       |
-| label       | text                           |                   | false    |                                                               |         | Coffee flavor profile label       |
-| description | text                           |                   | true     |                                                               |         | Coffee flavor profile description |
-| created_at  | timestamp(3) without time zone | CURRENT_TIMESTAMP | false    |                                                               |         |                                   |
-| updated_at  | timestamp(3) without time zone |                   | false    |                                                               |         |                                   |
+| Name        | Type                           | Default           | Nullable | Children                                                                                                                    | Parents | Comment                           |
+| ----------- | ------------------------------ | ----------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- | ------- | --------------------------------- |
+| id          | text                           |                   | false    | [public.flavor_profile_trees](public.flavor_profile_trees.md) [public.bean_flavor_profiles](public.bean_flavor_profiles.md) |         | Coffee flavor profile ID          |
+| value       | text                           |                   | false    |                                                                                                                             |         | Coffee flavor profile value       |
+| label       | text                           |                   | false    |                                                                                                                             |         | Coffee flavor profile label       |
+| description | text                           |                   | true     |                                                                                                                             |         | Coffee flavor profile description |
+| created_at  | timestamp(3) without time zone | CURRENT_TIMESTAMP | false    |                                                                                                                             |         |                                   |
+| updated_at  | timestamp(3) without time zone |                   | false    |                                                                                                                             |         |                                   |
 
 ## Constraints
 

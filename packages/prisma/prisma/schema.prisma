@@ -1,6 +1,7 @@
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native"]
+  output        = "../.generated/client"
 }
 
 datasource db {
@@ -8,20 +9,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Package {
+  id              String           @id @default(cuid())
+  name            String           @unique
+  description     String?
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  beansPackages   BeansPackage[]
+  packagePurchase PackagePurchase?
+
+  @@map("packages")
+}
+
+model BeansPackage {
+  id        String   @id @default(cuid())
+  beanId    String   @map("bean_id")
+  bean      Bean     @relation(fields: [beanId], references: [id])
+  packageId String   @map("package_id")
+  package   Package  @relation(fields: [packageId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("beans_packages")
+}
+
 model Bean {
   id                 String             @id @default(cuid())
   name               String
   description        String?
-  originId           String             @map("origin_id")
-  origin             Origin             @relation(fields: [originId], references: [id])
-  roastLevelId       String             @map("roast_level_id")
-  roastLevel         RoastLevel         @relation(fields: [roastLevelId], references: [id])
-  processingMethodId String             @map("processing_method_id")
-  processingMethod   ProcessingMethod   @relation(fields: [processingMethodId], references: [id])
+  originId           String?            @map("origin_id")
+  origin             Origin?            @relation(fields: [originId], references: [id])
+  roastLevelId       String?            @map("roast_level_id")
+  roastLevel         RoastLevel?        @relation(fields: [roastLevelId], references: [id])
+  processingMethodId String?            @map("processing_method_id")
+  processingMethod   ProcessingMethod?  @relation(fields: [processingMethodId], references: [id])
   createdAt          DateTime           @default(now()) @map("created_at")
   updatedAt          DateTime           @updatedAt @map("updated_at")
   beanFlavorProfile  BeanFlavorProfile?
   beanTastings       BeanTastings[]
+  beansPackages      BeansPackage[]
 
   @@map("beans")
 }
@@ -71,7 +97,22 @@ model FlavorProfile {
   updatedAt          DateTime            @updatedAt @map("updated_at")
   beanFlavorProfiles BeanFlavorProfile[]
 
+  parents  FlavorProfileTree[] @relation("parent")
+  children FlavorProfileTree[] @relation("child")
+
   @@map("flavor_profiles")
+}
+
+model FlavorProfileTree {
+  id        String        @id @default(cuid())
+  parentId  String        @map("parent_id")
+  parent    FlavorProfile @relation("parent", fields: [parentId], references: [id])
+  childId   String        @map("child_id")
+  child     FlavorProfile @relation("child", fields: [childId], references: [id])
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  @@map("flavor_profile_trees")
 }
 
 model BeanFlavorProfile {
@@ -112,11 +153,12 @@ model BeanTastings {
 }
 
 model Shop {
-  id           String        @id @default(cuid())
-  name         String        @unique
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
-  ShopLocation ShopLocation?
+  id              String           @id @default(cuid())
+  name            String           @unique
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  shopLocation    ShopLocation?
+  packagePurchase PackagePurchase?
 
   @@map("shops")
 }
@@ -128,18 +170,55 @@ model ShopLocation {
   longitude  Float?
   latitude   Float?
   postalCode String?  @map("postal_code")
-  prefecture String?  @map("prefecture")
-  city       String?  @map("city")
-  address    String?  @map("address")
+  prefecture String?
+  city       String?
+  address    String?
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
   @@map("shop_locations")
 }
 
-// 店舗
-// 購入日
-// 容量と価格
+model CofeeShop {
+  id                String             @id @default(cuid())
+  name              String             @unique
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+  cofeeShopLocation CofeeShopLocation?
+
+  @@map("cofee_shops")
+}
+
+model CofeeShopLocation {
+  id          String    @id @default(cuid())
+  cofeeShopId String    @unique @map("cofee_shop_id")
+  cofeeShop   CofeeShop @relation(fields: [cofeeShopId], references: [id])
+  longitude   Float?
+  latitude    Float?
+  postalCode  String?   @map("postal_code")
+  prefecture  String?
+  city        String?
+  address     String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("cofee_shop_locations")
+}
+
+model PackagePurchase {
+  id          String   @id @default(cuid())
+  packageId   String   @unique @map("package_id")
+  package     Package  @relation(fields: [packageId], references: [id])
+  shopId      String   @unique @map("shop_id")
+  shop        Shop     @relation(fields: [shopId], references: [id])
+  price       Int
+  capacity    Int
+  purchasedAt DateTime @map("purchased_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("package_purchases")
+}
 
 // 飲み方 種類
 // 飲み方毎の説明

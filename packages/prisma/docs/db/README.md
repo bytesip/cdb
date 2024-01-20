@@ -4,14 +4,22 @@
 
 | Name                                                          | Columns | Comment                           | Type       |
 | ------------------------------------------------------------- | ------- | --------------------------------- | ---------- |
-| [public.beans](public.beans.md)                               | 8       | Whole beans                       | BASE TABLE |
+| [public.packages](public.packages.md)                         | 5       |                                   | BASE TABLE |
+| [public.beans_packages](public.beans_packages.md)             | 5       |                                   | BASE TABLE |
+| [public.beans](public.beans.md)                               | 9       | Whole beans                       | BASE TABLE |
 | [public.origins](public.origins.md)                           | 7       | Coffee origins                    | BASE TABLE |
 | [public.roast_levels](public.roast_levels.md)                 | 5       | Coffee roast levels               | BASE TABLE |
 | [public.processing_methods](public.processing_methods.md)     | 5       | Coffee processing methods         | BASE TABLE |
 | [public.flavor_profiles](public.flavor_profiles.md)           | 6       | Coffee flavor profiles            | BASE TABLE |
+| [public.flavor_profile_trees](public.flavor_profile_trees.md) | 3       |                                   | BASE TABLE |
 | [public.bean_flavor_profiles](public.bean_flavor_profiles.md) | 5       | Bean flavor profiles relationship | BASE TABLE |
 | [public.tastings](public.tastings.md)                         | 8       | Coffee tasting                    | BASE TABLE |
 | [public.bean_tastings](public.bean_tastings.md)               | 4       | Bean tastings relationship        | BASE TABLE |
+| [public.shops](public.shops.md)                               | 4       |                                   | BASE TABLE |
+| [public.shop_locations](public.shop_locations.md)             | 10      |                                   | BASE TABLE |
+| [public.cofee_shops](public.cofee_shops.md)                   | 4       |                                   | BASE TABLE |
+| [public.cofee_shop_locations](public.cofee_shop_locations.md) | 10      |                                   | BASE TABLE |
+| [public.package_purchases](public.package_purchases.md)       | 8       |                                   | BASE TABLE |
 
 ## Relations
 
