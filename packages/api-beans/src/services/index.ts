@@ -1,1 +1,1 @@
-export {BeanQueryService} from './beanService';
+export {BeanService} from './beanService';

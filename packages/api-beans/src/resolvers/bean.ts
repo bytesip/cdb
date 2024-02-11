@@ -1,7 +1,5 @@
 import {GraphQLResolvers} from '@/.generated/graphql';
 
-import {BeanQueryService} from '@/services';
-
 export const beanResolverDefs = /* GraphQL */ `
   input CreateBeanInput {
     name: String!
@@ -18,19 +16,27 @@ export const beanResolverDefs = /* GraphQL */ `
   }
 `;
 
-const beanService = new BeanQueryService();
-
 export const beanResolvers: GraphQLResolvers = {
   Query: {
-    bean: async (_, {beanId}) => {
+    bean: async (_, {beanId}, {beanService}) => {
+      if (!beanService) {
+        throw new Error('beanService not found');
+      }
       return beanService.getBeanById(beanId);
     },
-    beans: async () => {
+    beans: async (_, __, {beanService}) => {
+      console.log('beanService', beanService);
+      if (!beanService) {
+        throw new Error('beanService not found');
+      }
       return beanService.getAllBeans();
     },
   },
   Mutation: {
-    createBean: async (_, {input}) => {
+    createBean: async (_, {input}, {beanService}) => {
+      if (!beanService) {
+        throw new Error('beanService not found');
+      }
       return beanService.createBean(input);
     },
   },

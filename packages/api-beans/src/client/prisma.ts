@@ -1,2 +1,5 @@
 import {PrismaClient} from '@cdb/prisma';
-export const prisma = new PrismaClient();
+import {Container} from 'typedi';
+
+export const prisma: PrismaClient = new PrismaClient();
+Container.set('prisma', prisma);

@@ -1,7 +1,7 @@
 import {GraphQLBean, GraphQLCreateBeanInput} from '@/.generated/graphql';
 import {prisma} from '@/client/prisma';
 
-export class BeanQueryService {
+export class BeanService {
   async getBeanById(id: string): Promise<GraphQLBean> {
     const bean = await prisma.bean.findUnique({
       where: {

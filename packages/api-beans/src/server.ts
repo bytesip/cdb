@@ -1,8 +1,10 @@
+import 'reflect-metadata';
 import * as express from 'express';
 import {createSchema, createYoga} from 'graphql-yoga';
 import {mergeResolvers, mergeTypeDefs} from '@graphql-tools/merge';
 import {entitySchemas} from './entities';
-import {scalarDefs, scalarResolvers} from './graphql/scalars';
+import {scalarDefs, scalarResolvers} from '@/graphql/scalars';
+import {createContext} from '@/graphql/context';
 import {resolverTypeDefs, resolvers as baseResolvers} from './resolvers';
 
 export const typeDefs = mergeTypeDefs([
@@ -23,7 +25,7 @@ async function execute(): Promise<void> {
       typeDefs,
       resolvers,
     }),
-    context: () => {},
+    context: createContext(),
     plugins: [],
   });
   app.use(PATH, server.requestListener);
