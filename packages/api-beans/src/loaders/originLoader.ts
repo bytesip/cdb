@@ -13,6 +13,7 @@ export class OriginLoader {
         const uniqueOriginIds = Array.from(new Set(originIds));
         const origins = await prisma.origin.findMany({
           include: {
+            // FIXME: Dataloader に移す
             beans: true,
           },
           where: {
