@@ -194,5 +194,12 @@ model PackPurchase {
   @@map("pack_purchases")
 }
 
-// 飲み方 種類
-// 飲み方毎の説明
+model SipMethod {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("sip_methods")
+}

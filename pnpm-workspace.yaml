@@ -1,2 +1,4 @@
 packages:
   - 'packages/prisma'
+  - 'packages/config'
+  - 'packages/api-beans'

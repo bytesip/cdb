@@ -18,6 +18,7 @@
 | [public.shops](public.shops.md)                               | 4       | Coffee shops                      | BASE TABLE |
 | [public.shop_locations](public.shop_locations.md)             | 10      | Coffee shop locations             | BASE TABLE |
 | [public.pack_purchases](public.pack_purchases.md)             | 8       | Coffee pack purchases             | BASE TABLE |
+| [public.sip_methods](public.sip_methods.md)                   | 5       | Coffee sipping methods            | BASE TABLE |
 
 ## Relations
 

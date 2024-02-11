@@ -134,3 +134,10 @@ comments:
       price: Coffee pack purchase price
       capacity: Coffee pack purchase capacity
       purchased_at: Coffee pack purchased at
+
+  - table: public.sip_methods
+    tableComment: Coffee sipping methods
+    columnComments:
+      id: Coffee sip method ID
+      name: Coffee sip method name
+      description: Coffee sip method description
