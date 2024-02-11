@@ -9,28 +9,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Package {
-  id              String           @id @default(cuid())
-  name            String           @unique
-  description     String?
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
-  beansPackages   BeansPackage[]
-  packagePurchase PackagePurchase?
+model Pack {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  description  String?
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  beansPacks   BeansPack[]
+  packPurchase PackPurchase?
 
-  @@map("packages")
+  @@map("packs")
 }
 
-model BeansPackage {
+model BeansPack {
   id        String   @id @default(cuid())
   beanId    String   @map("bean_id")
   bean      Bean     @relation(fields: [beanId], references: [id])
-  packageId String   @map("package_id")
-  package   Package  @relation(fields: [packageId], references: [id])
+  packId    String   @map("pack_id")
+  pack      Pack     @relation(fields: [packId], references: [id])
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("beans_packages")
+  @@map("beans_packs")
 }
 
 model Bean {
@@ -47,7 +47,7 @@ model Bean {
   updatedAt          DateTime           @updatedAt @map("updated_at")
   beanFlavorProfile  BeanFlavorProfile?
   beanTastings       BeanTastings[]
-  beansPackages      BeansPackage[]
+  beansPacks         BeansPack[]
 
   @@map("beans")
 }
@@ -153,12 +153,12 @@ model BeanTastings {
 }
 
 model Shop {
-  id              String           @id @default(cuid())
-  name            String           @unique
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
-  shopLocation    ShopLocation?
-  packagePurchase PackagePurchase?
+  id           String        @id @default(cuid())
+  name         String        @unique
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  shopLocation ShopLocation?
+  packPurchase PackPurchase?
 
   @@map("shops")
 }
@@ -179,36 +179,10 @@ model ShopLocation {
   @@map("shop_locations")
 }
 
-model CofeeShop {
-  id                String             @id @default(cuid())
-  name              String             @unique
-  createdAt         DateTime           @default(now()) @map("created_at")
-  updatedAt         DateTime           @updatedAt @map("updated_at")
-  cofeeShopLocation CofeeShopLocation?
-
-  @@map("cofee_shops")
-}
-
-model CofeeShopLocation {
-  id          String    @id @default(cuid())
-  cofeeShopId String    @unique @map("cofee_shop_id")
-  cofeeShop   CofeeShop @relation(fields: [cofeeShopId], references: [id])
-  longitude   Float?
-  latitude    Float?
-  postalCode  String?   @map("postal_code")
-  prefecture  String?
-  city        String?
-  address     String?
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
-
-  @@map("cofee_shop_locations")
-}
-
-model PackagePurchase {
+model PackPurchase {
   id          String   @id @default(cuid())
-  packageId   String   @unique @map("package_id")
-  package     Package  @relation(fields: [packageId], references: [id])
+  packId      String   @unique @map("pack_id")
+  pack        Pack     @relation(fields: [packId], references: [id])
   shopId      String   @unique @map("shop_id")
   shop        Shop     @relation(fields: [shopId], references: [id])
   price       Int
@@ -217,7 +191,7 @@ model PackagePurchase {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  @@map("package_purchases")
+  @@map("pack_purchases")
 }
 
 // 飲み方 種類

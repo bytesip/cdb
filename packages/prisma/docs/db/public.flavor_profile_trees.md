@@ -2,13 +2,17 @@
 
 ## Description
 
+Coffee flavor profile trees
+
 ## Columns
 
-| Name      | Type | Default | Nullable | Children | Parents                                             | Comment |
-| --------- | ---- | ------- | -------- | -------- | --------------------------------------------------- | ------- |
-| id        | text |         | false    |          |                                                     |         |
-| parent_id | text |         | false    |          | [public.flavor_profiles](public.flavor_profiles.md) |         |
-| child_id  | text |         | false    |          | [public.flavor_profiles](public.flavor_profiles.md) |         |
+| Name       | Type                           | Default           | Nullable | Children | Parents                                             | Comment                              |
+| ---------- | ------------------------------ | ----------------- | -------- | -------- | --------------------------------------------------- | ------------------------------------ |
+| id         | text                           |                   | false    |          |                                                     | Coffee flavor profile tree ID        |
+| parent_id  | text                           |                   | false    |          | [public.flavor_profiles](public.flavor_profiles.md) | Coffee flavor profile tree parent ID |
+| child_id   | text                           |                   | false    |          | [public.flavor_profiles](public.flavor_profiles.md) | Coffee flavor profile tree child ID  |
+| created_at | timestamp(3) without time zone | CURRENT_TIMESTAMP | false    |          |                                                     |                                      |
+| updated_at | timestamp(3) without time zone |                   | false    |          |                                                     |                                      |
 
 ## Constraints
 

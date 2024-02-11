@@ -2,14 +2,16 @@
 
 ## Description
 
+Coffee shops
+
 ## Columns
 
-| Name       | Type                           | Default           | Nullable | Children                                                                                                  | Parents | Comment |
-| ---------- | ------------------------------ | ----------------- | -------- | --------------------------------------------------------------------------------------------------------- | ------- | ------- |
-| id         | text                           |                   | false    | [public.shop_locations](public.shop_locations.md) [public.package_purchases](public.package_purchases.md) |         |         |
-| name       | text                           |                   | false    |                                                                                                           |         |         |
-| created_at | timestamp(3) without time zone | CURRENT_TIMESTAMP | false    |                                                                                                           |         |         |
-| updated_at | timestamp(3) without time zone |                   | false    |                                                                                                           |         |         |
+| Name       | Type                           | Default           | Nullable | Children                                                                                            | Parents | Comment          |
+| ---------- | ------------------------------ | ----------------- | -------- | --------------------------------------------------------------------------------------------------- | ------- | ---------------- |
+| id         | text                           |                   | false    | [public.shop_locations](public.shop_locations.md) [public.pack_purchases](public.pack_purchases.md) |         | Coffee shop ID   |
+| name       | text                           |                   | false    |                                                                                                     |         | Coffee shop name |
+| created_at | timestamp(3) without time zone | CURRENT_TIMESTAMP | false    |                                                                                                     |         |                  |
+| updated_at | timestamp(3) without time zone |                   | false    |                                                                                                     |         |                  |
 
 ## Constraints
 

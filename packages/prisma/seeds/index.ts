@@ -1,8 +1,8 @@
 import { PrismaClient } from '../.generated/client'
 import {
     beanFactory,
-    beansPackageFactory,
-    packageFactory,
+    beansPackFactory,
+    packFactory,
     originFactory,
     processingMethodFactory,
     roastLevelFactory,
@@ -53,13 +53,13 @@ const createBeans = async () => {
         data: beanFlavorProfiles,
     })
 
-    const pack = packageFactory.build()
-    await prisma.package.create({ data: pack })
-    const beansPackage = beansPackageFactory.build({
+    const pack = packFactory.build()
+    await prisma.pack.create({ data: pack })
+    const beansPack = beansPackFactory.build({
         beanId: beans[0].id,
-        packageId: pack.id,
+        packId: pack.id,
     })
-    await prisma.beansPackage.create({ data: beansPackage })
+    await prisma.beansPack.create({ data: beansPack })
 }
 
 const execute = async () => {

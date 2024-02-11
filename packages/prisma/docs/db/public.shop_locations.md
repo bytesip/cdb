@@ -2,20 +2,22 @@
 
 ## Description
 
+Coffee shop locations
+
 ## Columns
 
-| Name        | Type                           | Default           | Nullable | Children | Parents                         | Comment |
-| ----------- | ------------------------------ | ----------------- | -------- | -------- | ------------------------------- | ------- |
-| id          | text                           |                   | false    |          |                                 |         |
-| shop_id     | text                           |                   | false    |          | [public.shops](public.shops.md) |         |
-| longitude   | double precision               |                   | true     |          |                                 |         |
-| latitude    | double precision               |                   | true     |          |                                 |         |
-| postal_code | text                           |                   | true     |          |                                 |         |
-| prefecture  | text                           |                   | true     |          |                                 |         |
-| city        | text                           |                   | true     |          |                                 |         |
-| address     | text                           |                   | true     |          |                                 |         |
-| created_at  | timestamp(3) without time zone | CURRENT_TIMESTAMP | false    |          |                                 |         |
-| updated_at  | timestamp(3) without time zone |                   | false    |          |                                 |         |
+| Name        | Type                           | Default           | Nullable | Children | Parents                         | Comment                          |
+| ----------- | ------------------------------ | ----------------- | -------- | -------- | ------------------------------- | -------------------------------- |
+| id          | text                           |                   | false    |          |                                 | Coffee shop location ID          |
+| shop_id     | text                           |                   | false    |          | [public.shops](public.shops.md) | Coffee shop ID                   |
+| longitude   | double precision               |                   | true     |          |                                 | Coffee shop location longitude   |
+| latitude    | double precision               |                   | true     |          |                                 | Coffee shop location latitude    |
+| postal_code | text                           |                   | true     |          |                                 | Coffee shop location postal code |
+| prefecture  | text                           |                   | true     |          |                                 | Coffee shop location prefecture  |
+| city        | text                           |                   | true     |          |                                 | Coffee shop location city        |
+| address     | text                           |                   | true     |          |                                 | Coffee shop location address     |
+| created_at  | timestamp(3) without time zone | CURRENT_TIMESTAMP | false    |          |                                 |                                  |
+| updated_at  | timestamp(3) without time zone |                   | false    |          |                                 |                                  |
 
 ## Constraints
 

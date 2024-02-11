@@ -86,3 +86,51 @@ comments:
     columnComments:
       bean_id: Bean ID
       tasting_id: Tasting ID
+
+  - table: public.packs
+    tableComment: Coffee packs
+    columnComments:
+      id: Coffee pack ID
+      name: Coffee pack name
+      description: Coffee pack description
+
+  - table: public.beans_packs
+    tableComment: Beans packs relationship
+    columnComments:
+      bean_id: Bean ID
+      pack_id: Pack ID
+
+  - table: flavor_profile_trees
+    tableComment: Coffee flavor profile trees
+    columnComments:
+      id: Coffee flavor profile tree ID
+      parent_id: Coffee flavor profile tree parent ID
+      child_id: Coffee flavor profile tree child ID
+
+  - table: public.shops
+    tableComment: Coffee shops
+    columnComments:
+      id: Coffee shop ID
+      name: Coffee shop name
+
+  - table: public.shop_locations
+    tableComment: Coffee shop locations
+    columnComments:
+      id: Coffee shop location ID
+      shop_id: Coffee shop ID
+      longitude: Coffee shop location longitude
+      latitude: Coffee shop location latitude
+      postal_code: Coffee shop location postal code
+      prefecture: Coffee shop location prefecture
+      city: Coffee shop location city
+      address: Coffee shop location address
+  
+  - table: public.pack_purchases
+    tableComment: Coffee pack purchases
+    columnComments:
+      id: Coffee pack purchase ID
+      pack_id: Coffee pack ID
+      shop_id: Coffee shop ID
+      price: Coffee pack purchase price
+      capacity: Coffee pack purchase capacity
+      purchased_at: Coffee pack purchased at

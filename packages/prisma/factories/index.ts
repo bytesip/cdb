@@ -1,4 +1,4 @@
-export { beanFactory, beansPackageFactory, packageFactory } from './bean'
+export { beanFactory, beansPackFactory, packFactory } from './bean'
 export { originFactory } from './origin'
 export { roastLevelFactory } from './roastLevel'
 export { processingMethodFactory } from './processingMethod'

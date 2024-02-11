@@ -1,28 +1,28 @@
 import { Factory } from 'fishery'
 import { chance } from './client'
-import { Bean, Package, BeansPackage } from '../.generated/client'
+import { Bean, Pack, BeansPack } from '../.generated/client'
 
-class BeansPackageFactory implements BeansPackage {
+class BeansPackFactory implements BeansPack {
     id: string
     beanId: string
-    packageId: string
+    packId: string
     createdAt: Date
     updatedAt: Date
 
     constructor() {
         this.id = chance.guid({ version: 4 })
         this.beanId = chance.guid({ version: 4 })
-        this.packageId = chance.guid({ version: 4 })
+        this.packId = chance.guid({ version: 4 })
         this.createdAt = new Date()
         this.updatedAt = new Date()
     }
 }
 
-export const beansPackageFactory = Factory.define<BeansPackageFactory>(() => {
-    return new BeansPackageFactory()
+export const beansPackFactory = Factory.define<BeansPackFactory>(() => {
+    return new BeansPackFactory()
 })
 
-class PackageFactory implements Package {
+class PackFactory implements Pack {
     id: string
     name: string
     description: string
@@ -38,8 +38,8 @@ class PackageFactory implements Package {
     }
 }
 
-export const packageFactory = Factory.define<PackageFactory>(() => {
-    return new PackageFactory()
+export const packFactory = Factory.define<PackFactory>(() => {
+    return new PackFactory()
 })
 
 class BeanFactory implements Bean {

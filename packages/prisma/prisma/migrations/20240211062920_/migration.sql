@@ -1,23 +1,23 @@
 -- CreateTable
-CREATE TABLE "packages" (
+CREATE TABLE "packs" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "packages_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "packs_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "beans_packages" (
+CREATE TABLE "beans_packs" (
     "id" TEXT NOT NULL,
     "bean_id" TEXT NOT NULL,
-    "package_id" TEXT NOT NULL,
+    "pack_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "beans_packages_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "beans_packs_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -86,6 +86,8 @@ CREATE TABLE "flavor_profile_trees" (
     "id" TEXT NOT NULL,
     "parent_id" TEXT NOT NULL,
     "child_id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "flavor_profile_trees_pkey" PRIMARY KEY ("id")
 );
@@ -152,35 +154,9 @@ CREATE TABLE "shop_locations" (
 );
 
 -- CreateTable
-CREATE TABLE "cofee_shops" (
+CREATE TABLE "pack_purchases" (
     "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "cofee_shops_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "cofee_shop_locations" (
-    "id" TEXT NOT NULL,
-    "cofee_shop_id" TEXT NOT NULL,
-    "longitude" DOUBLE PRECISION,
-    "latitude" DOUBLE PRECISION,
-    "postal_code" TEXT,
-    "prefecture" TEXT,
-    "city" TEXT,
-    "address" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "cofee_shop_locations_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "package_purchases" (
-    "id" TEXT NOT NULL,
-    "bean_id" TEXT NOT NULL,
+    "pack_id" TEXT NOT NULL,
     "shop_id" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
     "capacity" INTEGER NOT NULL,
@@ -188,11 +164,11 @@ CREATE TABLE "package_purchases" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "package_purchases_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "pack_purchases_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "packages_name_key" ON "packages"("name");
+CREATE UNIQUE INDEX "packs_name_key" ON "packs"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "origins_name_key" ON "origins"("name");
@@ -222,22 +198,16 @@ CREATE UNIQUE INDEX "shops_name_key" ON "shops"("name");
 CREATE UNIQUE INDEX "shop_locations_shop_id_key" ON "shop_locations"("shop_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "cofee_shops_name_key" ON "cofee_shops"("name");
+CREATE UNIQUE INDEX "pack_purchases_pack_id_key" ON "pack_purchases"("pack_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "cofee_shop_locations_cofee_shop_id_key" ON "cofee_shop_locations"("cofee_shop_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "package_purchases_bean_id_key" ON "package_purchases"("bean_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "package_purchases_shop_id_key" ON "package_purchases"("shop_id");
+CREATE UNIQUE INDEX "pack_purchases_shop_id_key" ON "pack_purchases"("shop_id");
 
 -- AddForeignKey
-ALTER TABLE "beans_packages" ADD CONSTRAINT "beans_packages_bean_id_fkey" FOREIGN KEY ("bean_id") REFERENCES "beans"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "beans_packs" ADD CONSTRAINT "beans_packs_bean_id_fkey" FOREIGN KEY ("bean_id") REFERENCES "beans"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "beans_packages" ADD CONSTRAINT "beans_packages_package_id_fkey" FOREIGN KEY ("package_id") REFERENCES "packages"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "beans_packs" ADD CONSTRAINT "beans_packs_pack_id_fkey" FOREIGN KEY ("pack_id") REFERENCES "packs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "beans" ADD CONSTRAINT "beans_origin_id_fkey" FOREIGN KEY ("origin_id") REFERENCES "origins"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -270,10 +240,7 @@ ALTER TABLE "bean_tastings" ADD CONSTRAINT "bean_tastings_bean_id_fkey" FOREIGN 
 ALTER TABLE "shop_locations" ADD CONSTRAINT "shop_locations_shop_id_fkey" FOREIGN KEY ("shop_id") REFERENCES "shops"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "cofee_shop_locations" ADD CONSTRAINT "cofee_shop_locations_cofee_shop_id_fkey" FOREIGN KEY ("cofee_shop_id") REFERENCES "cofee_shops"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "pack_purchases" ADD CONSTRAINT "pack_purchases_pack_id_fkey" FOREIGN KEY ("pack_id") REFERENCES "packs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "package_purchases" ADD CONSTRAINT "package_purchases_bean_id_fkey" FOREIGN KEY ("bean_id") REFERENCES "beans"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "package_purchases" ADD CONSTRAINT "package_purchases_shop_id_fkey" FOREIGN KEY ("shop_id") REFERENCES "shops"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "pack_purchases" ADD CONSTRAINT "pack_purchases_shop_id_fkey" FOREIGN KEY ("shop_id") REFERENCES "shops"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
