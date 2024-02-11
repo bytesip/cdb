@@ -1,7 +1,7 @@
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native"]
-  output        = "../.generated/client"
+  output        = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -10,7 +10,7 @@ datasource db {
 }
 
 model Pack {
-  id           String        @id @default(cuid())
+  id           String        @id @default(uuid())
   name         String        @unique
   description  String?
   createdAt    DateTime      @default(now()) @map("created_at")
@@ -22,7 +22,7 @@ model Pack {
 }
 
 model BeansPack {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   beanId    String   @map("bean_id")
   bean      Bean     @relation(fields: [beanId], references: [id])
   packId    String   @map("pack_id")
@@ -34,7 +34,7 @@ model BeansPack {
 }
 
 model Bean {
-  id                 String             @id @default(cuid())
+  id                 String             @id @default(uuid())
   name               String
   description        String?
   originId           String?            @map("origin_id")
@@ -53,7 +53,7 @@ model Bean {
 }
 
 model Origin {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   name        String   @unique
   description String?
   longitude   Float?
@@ -66,7 +66,7 @@ model Origin {
 }
 
 model RoastLevel {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   name        String   @unique
   description String?
   createdAt   DateTime @default(now()) @map("created_at")
@@ -77,7 +77,7 @@ model RoastLevel {
 }
 
 model ProcessingMethod {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   name        String   @unique
   description String
   createdAt   DateTime @default(now()) @map("created_at")
@@ -89,7 +89,7 @@ model ProcessingMethod {
 
 // ref: https://notbadcoffee.com/flavor-wheel-en/
 model FlavorProfile {
-  id                 String              @id @default(cuid())
+  id                 String              @id @default(uuid())
   value              String              @unique
   label              String
   description        String?
@@ -104,7 +104,7 @@ model FlavorProfile {
 }
 
 model FlavorProfileTree {
-  id        String        @id @default(cuid())
+  id        String        @id @default(uuid())
   parentId  String        @map("parent_id")
   parent    FlavorProfile @relation("parent", fields: [parentId], references: [id])
   childId   String        @map("child_id")
@@ -116,7 +116,7 @@ model FlavorProfileTree {
 }
 
 model BeanFlavorProfile {
-  id              String        @id @default(cuid())
+  id              String        @id @default(uuid())
   beanId          String        @unique @map("bean_id")
   bean            Bean          @relation(fields: [beanId], references: [id])
   flavorProfileId String        @map("flavor_profile_id")
@@ -128,7 +128,7 @@ model BeanFlavorProfile {
 }
 
 model Tasting {
-  id           String         @id @default(cuid())
+  id           String         @id @default(uuid())
   name         String         @unique
   description  String
   acidity      Int
@@ -153,7 +153,7 @@ model BeanTastings {
 }
 
 model Shop {
-  id           String        @id @default(cuid())
+  id           String        @id @default(uuid())
   name         String        @unique
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")
@@ -164,7 +164,7 @@ model Shop {
 }
 
 model ShopLocation {
-  id         String   @id @default(cuid())
+  id         String   @id @default(uuid())
   shopId     String   @unique @map("shop_id")
   shop       Shop     @relation(fields: [shopId], references: [id])
   longitude  Float?
@@ -180,7 +180,7 @@ model ShopLocation {
 }
 
 model PackPurchase {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   packId      String   @unique @map("pack_id")
   pack        Pack     @relation(fields: [packId], references: [id])
   shopId      String   @unique @map("shop_id")
@@ -195,7 +195,7 @@ model PackPurchase {
 }
 
 model SipMethod {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   name        String   @unique
   description String?
   createdAt   DateTime @default(now()) @map("created_at")

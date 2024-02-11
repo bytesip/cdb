@@ -1,6 +1,6 @@
 {
-  "extends": "./node_modules/@cdb/config/tsconfig.base.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "./dist"
   },
 }

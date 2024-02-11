@@ -1,48 +1,32 @@
-import {GraphQLBean, GraphQLCreateBeanInput} from '../.generated/graphql';
+import {GraphQLBean, GraphQLCreateBeanInput} from '@/.generated/graphql';
+import {prisma} from '@/client/prisma';
 
 export class BeanQueryService {
   async getBeanById(id: string): Promise<GraphQLBean> {
-    return {
-      id: id,
-      name: 'Test Bean',
-      description: 'A test bean',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    const bean = await prisma.bean.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!bean) {
+      // GraphQL Error にかえる
+      throw new Error(`Bean with id ${id} not found`);
+    }
+    return bean;
   }
 
   async getAllBeans(): Promise<GraphQLBean[]> {
-    return [
-      {
-        id: '0d505571-4b65-44eb-a40d-d20f9af17daf',
-        name: 'Test Bean',
-        description: 'A test bean',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: '0d505571-4b65-44eb-a40d-d20f9af17daf',
-        name: 'Test Bean',
-        description: 'A test bean',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: '0d505571-4b65-44eb-a40d-d20f9af17daf',
-        name: 'Test Bean',
-        description: 'A test bean',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ];
+    const beans = await prisma.bean.findMany();
+    return beans;
   }
 
   async createBean(input: GraphQLCreateBeanInput): Promise<GraphQLBean> {
-    return {
-      ...input,
-      id: '0d505571-4b65-44eb-a40d-d20f9af17daf',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    const bean = await prisma.bean.create({
+      data: {
+        name: input.name,
+        description: input.description,
+      },
+    });
+    return bean;
   }
 }

@@ -167,6 +167,17 @@ CREATE TABLE "pack_purchases" (
     CONSTRAINT "pack_purchases_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "sip_methods" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "sip_methods_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "packs_name_key" ON "packs"("name");
 
@@ -202,6 +213,9 @@ CREATE UNIQUE INDEX "pack_purchases_pack_id_key" ON "pack_purchases"("pack_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "pack_purchases_shop_id_key" ON "pack_purchases"("shop_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "sip_methods_name_key" ON "sip_methods"("name");
 
 -- AddForeignKey
 ALTER TABLE "beans_packs" ADD CONSTRAINT "beans_packs_bean_id_fkey" FOREIGN KEY ("bean_id") REFERENCES "beans"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

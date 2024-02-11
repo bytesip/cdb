@@ -1,10 +1,11 @@
-import {GraphQLResolvers} from '../.generated/graphql';
+import {GraphQLResolvers} from '@/.generated/graphql';
 
-import {BeanQueryService} from '../services';
+import {BeanQueryService} from '@/services';
 
 export const beanResolverDefs = /* GraphQL */ `
   input CreateBeanInput {
     name: String!
+    description: String
   }
 
   type Mutation {
