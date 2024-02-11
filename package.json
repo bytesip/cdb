@@ -10,7 +10,7 @@
     "build": "pnpm -r build"
   },
   "devDependencies": {
-    "@tsconfig/recommended": "^1.0.3",
+    "@cdb/config": "workspace:*",
     "@types/node": "^20.6.2",
     "typescript": "~5.2.2"
   }

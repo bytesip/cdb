@@ -1,29 +1,36 @@
+import * as express from 'express';
 import {createSchema, createYoga} from 'graphql-yoga';
 import {mergeResolvers, mergeTypeDefs} from '@graphql-tools/merge';
-
-import {entitySchema} from './entities/index.ts';
-import {scalarDefs, scalarResolvers} from './graphql';
-import {resolverTypeDefs, resolvers} from './resolvers';
+import {entitySchemas} from './entities';
+import {scalarDefs, scalarResolvers} from './graphql/scalars';
+import {resolverTypeDefs, resolvers as baseResolvers} from './resolvers';
 
 export const typeDefs = mergeTypeDefs([
   scalarDefs,
-  ...entitySchema,
+  ...entitySchemas,
   ...resolverTypeDefs,
 ]);
+const resolvers = mergeResolvers([scalarResolvers, baseResolvers]);
 
-const yoga = createYoga({
-  schema: createSchema({
-    typeDefs: typeDefs,
-    resolvers: mergeResolvers([scalarResolvers, resolvers]),
-  }),
-});
+async function execute(): Promise<void> {
+  const app = express();
 
-if (import.meta.main) {
-  serve(yoga, {
-    onListen({hostname, port}) {
-      console.log(
-        `Listening on http://${hostname}:${port}/${yoga.graphqlEndpoint}`
-      );
-    },
+  const PATH = '/graphql';
+  const PORT = 4010;
+  const server = createYoga({
+    graphqlEndpoint: PATH,
+    schema: createSchema({
+      typeDefs,
+      resolvers,
+    }),
+    context: () => {},
+    plugins: [],
+  });
+  app.use(PATH, server.requestListener);
+
+  app.listen({port: PORT}, () => {
+    console.log(`Server is running on port ${PORT}`);
   });
 }
+
+void execute();

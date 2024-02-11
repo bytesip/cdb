@@ -1,7 +1,12 @@
-import {mergeResolvers} from 'npm:@graphql-tools/merge';
+import {mergeResolvers} from '@graphql-tools/merge';
 
-import {mutationResolver, mutationTypeDefs} from './mutations/index.ts';
-import {queryResolver, queryTypeDefs} from './queries/index.ts';
+import {queryResolver, queryTypeDefs} from './queries';
+import {mutationResolver, mutationTypeDefs} from './mutation';
 
-export const resolverTypeDefs = [...mutationTypeDefs, ...queryTypeDefs];
-export const resolvers = mergeResolvers([queryResolver, mutationResolver]);
+import {GraphQLResolvers} from '../.generated/graphql';
+
+export const resolverTypeDefs = [...queryTypeDefs, ...mutationTypeDefs];
+export const resolvers: GraphQLResolvers = mergeResolvers([
+  queryResolver,
+  mutationResolver,
+]);

@@ -1,5 +1,9 @@
-import {mergeResolvers} from 'npm:@graphql-tools/merge';
-import {tenantQueryResolver, tenantQueryResolverDefs} from './tenant.ts';
+import {mergeResolvers} from '@graphql-tools/merge';
+import {beanQueryResolverDefs, beanQueryResolvers} from './bean';
 
-export const queryTypeDefs = [tenantQueryResolverDefs];
-export const queryResolver = mergeResolvers([tenantQueryResolver]);
+const resolvers = [beanQueryResolvers];
+export const queryTypeDefs = [beanQueryResolverDefs];
+
+export const queryResolver = {
+  Query: mergeResolvers(resolvers),
+};
