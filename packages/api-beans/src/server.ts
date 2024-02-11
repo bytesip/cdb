@@ -10,7 +10,7 @@ export const typeDefs = mergeTypeDefs([
   ...entitySchemas,
   ...resolverTypeDefs,
 ]);
-const resolvers = mergeResolvers([scalarResolvers, baseResolvers]);
+const resolvers = mergeResolvers([scalarResolvers, ...baseResolvers]);
 
 async function execute(): Promise<void> {
   const app = express();
