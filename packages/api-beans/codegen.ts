@@ -42,6 +42,8 @@ const config: CodegenConfig = {
       ],
       config: {
         contextType: '@/graphql/context#Context',
+        maybeValue:
+          'T extends PromiseLike<infer U> ? Promise<U | null> : T | null',
       },
     },
   },

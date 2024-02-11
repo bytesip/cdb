@@ -31,18 +31,11 @@ export const beanResolvers: GraphQLResolvers = {
     },
   },
   Bean: {
-    origin: async (parent, _, ctx) => {
-      return {
-        __typename: 'Origin',
-        id: '0d505571-4b65-44eb-a40d-d20f9af17daf',
-        name: 'Test Origin',
-        description: 'A test origin',
-        latitude: 0,
-        longitude: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        beans: [],
-      };
+    origin: async (parent, _, {loaders: {originLoader}}) => {
+      if (!parent.originId) {
+        return null;
+      }
+      return await originLoader.load(parent.originId);
     },
     roastLevel: async () => {
       return {

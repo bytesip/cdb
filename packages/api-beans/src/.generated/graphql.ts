@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { Context } from '@/graphql/context';
-export type Maybe<T> = T | null;
-export type InputMaybe<T> = Maybe<T>;
+export type Maybe<T> = T extends PromiseLike<infer U> ? Promise<U | null> : T | null;
+export type InputMaybe<T> = T extends PromiseLike<infer U> ? Promise<U | null> : T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -123,7 +123,7 @@ export type GraphQLMutationCreateBeanArgs = {
 
 export type GraphQLOrigin = GraphQLBaseOrigin & {
   __typename?: 'Origin';
-  beans: Array<Maybe<GraphQLBean>>;
+  beans?: Maybe<Array<GraphQLBean>>;
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
@@ -415,7 +415,7 @@ export type GraphQLMutationResolvers<ContextType = Context, ParentType extends G
 };
 
 export type GraphQLOriginResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['Origin'] = GraphQLResolversParentTypes['Origin']> = {
-  beans?: Resolver<Array<Maybe<GraphQLResolversTypes['Bean']>>, ParentType, ContextType>;
+  beans?: Resolver<Maybe<Array<GraphQLResolversTypes['Bean']>>, ParentType, ContextType>;
   createdAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
   description?: Resolver<Maybe<GraphQLResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<GraphQLResolversTypes['UUID'], ParentType, ContextType>;
