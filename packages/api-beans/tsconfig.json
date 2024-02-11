@@ -1,22 +1,38 @@
 {
-  "extends": "./node_modules/@cdb/config/tsconfig.base.json",
-  "target": "es5",
-  "lib": [
-    "es5"
-  ],
-  "types": [
-    "reflect-metadata"
-  ],
-  "emitDecoratorMetadata": true,
-  "experimentalDecorators": true,
-  "moduleResolution": "node",
   "compilerOptions": {
-    "outDir": "./dist",
+    "allowJs": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "jsx": "react",
+    "lib": [
+      "es2017",
+      "es7",
+      "es6",
+      "dom"
+    ],
+    "module": "commonjs",
+    "outDir": "lib",
+    "sourceMap": true,
+    "target": "ES2020",
+    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"
       ],
+      "~/*": [
+        "./*"
+      ]
     }
-  }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

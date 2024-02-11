@@ -18,30 +18,20 @@ export const beanResolverDefs = /* GraphQL */ `
 
 export const beanResolvers: GraphQLResolvers = {
   Query: {
-    bean: async (_, {beanId}, {beanService}) => {
-      if (!beanService) {
-        throw new Error('beanService not found');
-      }
+    bean: async (_, {beanId}, {services: {beanService}}) => {
       return beanService.getBeanById(beanId);
     },
-    beans: async (_, __, {beanService}) => {
-      console.log('beanService', beanService);
-      if (!beanService) {
-        throw new Error('beanService not found');
-      }
+    beans: async (_, __, {services: {beanService}}) => {
       return beanService.getAllBeans();
     },
   },
   Mutation: {
-    createBean: async (_, {input}, {beanService}) => {
-      if (!beanService) {
-        throw new Error('beanService not found');
-      }
+    createBean: async (_, {input}, {services: {beanService}}) => {
       return beanService.createBean(input);
     },
   },
   Bean: {
-    origin: async () => {
+    origin: async (parent, _, ctx) => {
       return {
         __typename: 'Origin',
         id: '0d505571-4b65-44eb-a40d-d20f9af17daf',

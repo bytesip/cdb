@@ -1,10 +1,10 @@
 import 'reflect-metadata';
-import * as express from 'express';
+import express from 'express';
 import {createSchema, createYoga} from 'graphql-yoga';
 import {mergeResolvers, mergeTypeDefs} from '@graphql-tools/merge';
 import {entitySchemas} from './entities';
 import {scalarDefs, scalarResolvers} from '@/graphql/scalars';
-import {createContext} from '@/graphql/context';
+import {createContext, Context} from '@/graphql/context';
 import {resolverTypeDefs, resolvers as baseResolvers} from './resolvers';
 
 export const typeDefs = mergeTypeDefs([
@@ -19,13 +19,15 @@ async function execute(): Promise<void> {
 
   const PATH = '/graphql';
   const PORT = 4010;
-  const server = createYoga({
+
+  // FIXME: don't use any
+  const server = createYoga<any, any>({
     graphqlEndpoint: PATH,
     schema: createSchema({
       typeDefs,
       resolvers,
     }),
-    context: createContext(),
+    context: createContext,
     plugins: [],
   });
   app.use(PATH, server.requestListener);
