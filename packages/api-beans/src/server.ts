@@ -4,7 +4,7 @@ import {createSchema, createYoga} from 'graphql-yoga';
 import {mergeResolvers, mergeTypeDefs} from '@graphql-tools/merge';
 import {entitySchemas} from './entities';
 import {scalarDefs, scalarResolvers} from '@/graphql/scalars';
-import {createContext, Context} from '@/graphql/context';
+import {createContext} from '@/graphql/context';
 import {resolverTypeDefs, resolvers as baseResolvers} from './resolvers';
 
 export const typeDefs = mergeTypeDefs([
