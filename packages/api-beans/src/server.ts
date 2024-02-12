@@ -13,6 +13,10 @@ export const typeDefs = mergeTypeDefs([
   ...resolverTypeDefs,
 ]);
 const resolvers = mergeResolvers([scalarResolvers, ...baseResolvers]);
+export const schema = createSchema({
+  typeDefs,
+  resolvers,
+});
 
 async function execute(): Promise<void> {
   initializeDIContainer();
@@ -25,10 +29,7 @@ async function execute(): Promise<void> {
   // FIXME: don't use any
   const server = createYoga<any, any>({
     graphqlEndpoint: PATH,
-    schema: createSchema({
-      typeDefs,
-      resolvers,
-    }),
+    schema,
     context: createContext,
     plugins: [],
   });
@@ -39,4 +40,6 @@ async function execute(): Promise<void> {
   });
 }
 
-void execute();
+if (require.main === module) {
+  execute();
+}

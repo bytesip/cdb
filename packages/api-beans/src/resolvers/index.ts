@@ -1,4 +1,5 @@
 import {beanResolverDefs, beanResolvers} from './bean';
+import {originResolverDefs, originResolvers} from './origin';
 
-export const resolverTypeDefs = [beanResolverDefs];
-export const resolvers = [beanResolvers];
+export const resolverTypeDefs = [beanResolverDefs, originResolverDefs];
+export const resolvers = [beanResolvers, originResolvers];

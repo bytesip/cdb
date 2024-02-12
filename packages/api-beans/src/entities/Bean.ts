@@ -23,8 +23,9 @@ export const BeanSchema = /* GraphQL */ `
     origin: Origin
     roastLevel: RoastLevel
     processingMethod: ProcessingMethod
-    flavorProfile: FlavorProfile
-    #   tastings: [Tasting]!
-    #   packs: [Pack]!
+    # NOTE: reverse relations
+    flavorProfiles: [FlavorProfile]
+    tastings: [Tasting]
+    packs: [Pack]
   }
 `;

@@ -9,13 +9,13 @@ datasource db {
 }
 
 model Pack {
-  id           String        @id @default(uuid())
-  name         String        @unique
-  description  String?
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
-  beansPacks   BeansPack[]
-  packPurchase PackPurchase?
+  id            String         @id @default(uuid())
+  name          String         @unique
+  description   String?
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  beansPacks    BeansPack[]
+  packPurchases PackPurchase[]
 
   @@map("packs")
 }
@@ -33,20 +33,20 @@ model BeansPack {
 }
 
 model Bean {
-  id                 String             @id @default(uuid())
+  id                 String              @id @default(uuid())
   name               String
   description        String?
-  originId           String?            @map("origin_id")
-  origin             Origin?            @relation(fields: [originId], references: [id])
-  roastLevelId       String?            @map("roast_level_id")
-  roastLevel         RoastLevel?        @relation(fields: [roastLevelId], references: [id])
-  processingMethodId String?            @map("processing_method_id")
-  processingMethod   ProcessingMethod?  @relation(fields: [processingMethodId], references: [id])
-  createdAt          DateTime           @default(now()) @map("created_at")
-  updatedAt          DateTime           @updatedAt @map("updated_at")
-  beanFlavorProfile  BeanFlavorProfile?
+  originId           String?             @map("origin_id")
+  origin             Origin?             @relation(fields: [originId], references: [id])
+  roastLevelId       String?             @map("roast_level_id")
+  roastLevel         RoastLevel?         @relation(fields: [roastLevelId], references: [id])
+  processingMethodId String?             @map("processing_method_id")
+  processingMethod   ProcessingMethod?   @relation(fields: [processingMethodId], references: [id])
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
   beanTastings       BeanTastings[]
   beansPacks         BeansPack[]
+  beanFlavorProfiles BeanFlavorProfile[]
 
   @@map("beans")
 }
@@ -116,7 +116,7 @@ model FlavorProfileTree {
 
 model BeanFlavorProfile {
   id              String        @id @default(uuid())
-  beanId          String        @unique @map("bean_id")
+  beanId          String        @map("bean_id")
   bean            Bean          @relation(fields: [beanId], references: [id])
   flavorProfileId String        @map("flavor_profile_id")
   flavorProfile   FlavorProfile @relation(fields: [flavorProfileId], references: [id])
@@ -152,12 +152,11 @@ model BeanTastings {
 }
 
 model Shop {
-  id           String        @id @default(uuid())
-  name         String        @unique
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
-  shopLocation ShopLocation?
-  packPurchase PackPurchase?
+  id            String         @id @default(uuid())
+  name          String         @unique
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  packPurchases PackPurchase[]
 
   @@map("shops")
 }
@@ -165,7 +164,6 @@ model Shop {
 model ShopLocation {
   id         String   @id @default(uuid())
   shopId     String   @unique @map("shop_id")
-  shop       Shop     @relation(fields: [shopId], references: [id])
   longitude  Float?
   latitude   Float?
   postalCode String?  @map("postal_code")
@@ -180,16 +178,17 @@ model ShopLocation {
 
 model PackPurchase {
   id          String   @id @default(uuid())
-  packId      String   @unique @map("pack_id")
-  pack        Pack     @relation(fields: [packId], references: [id])
-  shopId      String   @unique @map("shop_id")
-  shop        Shop     @relation(fields: [shopId], references: [id])
+  packId      String   @map("pack_id")
+  shopId      String   @map("shop_id")
   price       Int
   capacity    Int
   purchasedAt DateTime @map("purchased_at")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
+  pack        Pack     @relation(fields: [packId], references: [id])
+  shop        Shop     @relation(fields: [shopId], references: [id])
 
+  @@unique([packId, shopId])
   @@map("pack_purchases")
 }
 

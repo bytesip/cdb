@@ -1,9 +1,10 @@
-import {GraphQLResolvers} from '@/.generated/graphql';
+import {IResolvers} from '@/.generated/graphql';
 
 export const beanResolverDefs = /* GraphQL */ `
   input CreateBeanInput {
     name: String!
     description: String
+    origin: CreateOriginInput
   }
 
   type Mutation {
@@ -16,7 +17,7 @@ export const beanResolverDefs = /* GraphQL */ `
   }
 `;
 
-export const beanResolvers: GraphQLResolvers = {
+export const beanResolvers: IResolvers = {
   Query: {
     bean: async (_, {beanId}, {services: {beanService}}) => {
       return beanService.getBeanById(beanId);
@@ -37,27 +38,21 @@ export const beanResolvers: GraphQLResolvers = {
       }
       return await originLoader.load(parent.originId);
     },
-    roastLevel: async () => {
-      return {
-        __typename: 'RoastLevel',
-        id: '0d505571-4b65-44eb-a40d-d20f9af17daf',
-        name: 'Test Roast Level',
-        description: 'A test roast level',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        beans: [],
-      };
+    roastLevel: async (parent, _, {loaders: {roastLevelLoader}}) => {
+      if (!parent.roastLevelId) {
+        return null;
+      }
+      return await roastLevelLoader.load(parent.roastLevelId);
     },
-    processingMethod: async () => {
-      return {
-        __typename: 'ProcessingMethod',
-        id: '0d505571-4b65-44eb-a40d-d20f9af17daf',
-        name: 'Test Processing Method',
-        description: 'A test processing method',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        beans: [],
-      };
+    processingMethod: async (
+      parent,
+      _,
+      {loaders: {processingMethodLoader}}
+    ) => {
+      if (!parent.processingMethodId) {
+        return null;
+      }
+      return await processingMethodLoader.load(parent.processingMethodId);
     },
   },
 };

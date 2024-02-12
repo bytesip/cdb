@@ -1,0 +1,225 @@
+"""
+A field whose value is a valid decimal degrees latitude number (53.471): https://en.wikipedia.org/wiki/Latitude
+"""
+scalar Latitude
+
+"""
+A field whose value is a valid decimal degrees longitude number (53.471): https://en.wikipedia.org/wiki/Longitude
+"""
+scalar Longitude
+
+"""
+A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt.
+"""
+scalar URL
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
+"""
+A field whose value is a generic Universally Unique Identifier: https://en.wikipedia.org/wiki/Universally_unique_identifier.
+"""
+scalar UUID
+
+interface BaseBean {
+  id: UUID!
+  name: String!
+  description: String
+  originId: UUID
+  roastLevelId: UUID
+  processingMethodId: UUID
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+type Bean implements BaseBean {
+  id: UUID!
+  name: String!
+  description: String
+  originId: UUID
+  roastLevelId: UUID
+  processingMethodId: UUID
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+  origin: Origin
+  roastLevel: RoastLevel
+  processingMethod: ProcessingMethod
+  flavorProfiles: [FlavorProfile]
+  tastings: [Tasting]
+  packs: [Pack]
+}
+
+interface BaseFlavorProfile {
+  id: UUID!
+  value: String!
+  label: String!
+  description: String
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+type FlavorProfile implements BaseFlavorProfile {
+  id: UUID!
+  value: String!
+  label: String!
+  description: String
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+interface BaseOrigin {
+  id: UUID!
+  name: String!
+  description: String
+  latitude: Latitude
+  longitude: Longitude
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+type Origin implements BaseOrigin {
+  id: UUID!
+  name: String!
+  description: String
+  latitude: Latitude
+  longitude: Longitude
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+  beans: [Bean]
+}
+
+interface BasePack {
+  id: UUID!
+  name: String!
+  description: String
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+type Pack implements BasePack {
+  id: UUID!
+  name: String!
+  description: String
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+interface BaseBeanProcessingMethod {
+  id: UUID!
+  name: String!
+  description: String
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+type ProcessingMethod implements BaseBeanProcessingMethod {
+  id: UUID!
+  name: String!
+  description: String
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+interface BasePurchase {
+  id: UUID!
+  packId: UUID!
+  shopId: UUID!
+  price: Int!
+  capacity: Int!
+  purchasedAt: DateTimeISO!
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+type Purchase implements BasePurchase {
+  id: UUID!
+  packId: UUID!
+  shopId: UUID!
+  price: Int!
+  capacity: Int!
+  purchasedAt: DateTimeISO!
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+  pack: Pack
+  shop: Shop
+}
+
+interface BaseBeanRoastLevel {
+  id: UUID!
+  name: String!
+  description: String
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+type RoastLevel implements BaseBeanRoastLevel {
+  id: UUID!
+  name: String!
+  description: String
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+interface BaseShop {
+  id: UUID!
+  name: String!
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+type Shop implements BaseShop {
+  id: UUID!
+  name: String!
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+interface BaseTasting {
+  id: UUID!
+  name: String!
+  description: String!
+  acidity: Int!
+  richness: Int!
+  conductedAt: DateTimeISO!
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+type Tasting implements BaseTasting {
+  id: UUID!
+  name: String!
+  description: String!
+  acidity: Int!
+  richness: Int!
+  conductedAt: DateTimeISO!
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+input CreateBeanInput {
+  name: String!
+  description: String
+  origin: CreateOriginInput
+}
+
+type Mutation {
+  createBean(input: CreateBeanInput!): Bean!
+  createOrigin(input: CreateOriginInput!): Origin!
+}
+
+type Query {
+  bean(beanId: UUID!): Bean!
+  beans: [Bean]!
+  origin(originId: UUID!): Origin!
+  origins: [Origin]!
+}
+
+input CreateOriginInput {
+  id: UUID
+  name: String!
+  description: String
+  longitude: Longitude
+  latitude: Latitude
+}

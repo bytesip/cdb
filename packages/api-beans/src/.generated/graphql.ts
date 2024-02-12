@@ -15,14 +15,19 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format. */
   DateTimeISO: { input: Date; output: Date; }
-  Latitude: { input: number | string; output: number | string; }
-  Longitude: { input: number | string; output: number | string; }
+  /** A field whose value is a valid decimal degrees latitude number (53.471): https://en.wikipedia.org/wiki/Latitude */
+  Latitude: { input: number; output: number; }
+  /** A field whose value is a valid decimal degrees longitude number (53.471): https://en.wikipedia.org/wiki/Longitude */
+  Longitude: { input: number; output: number; }
+  /** A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt. */
   URL: { input: string; output: string; }
+  /** A field whose value is a generic Universally Unique Identifier: https://en.wikipedia.org/wiki/Universally_unique_identifier. */
   UUID: { input: string; output: string; }
 };
 
-export type GraphQLBaseBean = {
+export type IBaseBean = {
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
@@ -33,7 +38,7 @@ export type GraphQLBaseBean = {
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
-export type GraphQLBaseBeanProcessingMethod = {
+export type IBaseBeanProcessingMethod = {
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
@@ -41,7 +46,7 @@ export type GraphQLBaseBeanProcessingMethod = {
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
-export type GraphQLBaseBeanRoastLevel = {
+export type IBaseBeanRoastLevel = {
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
@@ -49,7 +54,7 @@ export type GraphQLBaseBeanRoastLevel = {
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
-export type GraphQLBaseFlavorProfile = {
+export type IBaseFlavorProfile = {
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
@@ -58,7 +63,7 @@ export type GraphQLBaseFlavorProfile = {
   value: Scalars['String']['output'];
 };
 
-export type GraphQLBaseOrigin = {
+export type IBaseOrigin = {
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
@@ -68,7 +73,33 @@ export type GraphQLBaseOrigin = {
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
-export type GraphQLBaseTasting = {
+export type IBasePack = {
+  createdAt: Scalars['DateTimeISO']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+export type IBasePurchase = {
+  capacity: Scalars['Int']['output'];
+  createdAt: Scalars['DateTimeISO']['output'];
+  id: Scalars['UUID']['output'];
+  packId: Scalars['UUID']['output'];
+  price: Scalars['Int']['output'];
+  purchasedAt: Scalars['DateTimeISO']['output'];
+  shopId: Scalars['UUID']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+export type IBaseShop = {
+  createdAt: Scalars['DateTimeISO']['output'];
+  id: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+export type IBaseTasting = {
   acidity: Scalars['Int']['output'];
   conductedAt: Scalars['DateTimeISO']['output'];
   createdAt: Scalars['DateTimeISO']['output'];
@@ -79,30 +110,40 @@ export type GraphQLBaseTasting = {
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
-export type GraphQLBean = GraphQLBaseBean & {
+export type IBean = IBaseBean & {
   __typename?: 'Bean';
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
-  flavorProfile?: Maybe<GraphQLFlavorProfile>;
+  flavorProfiles?: Maybe<Array<Maybe<IFlavorProfile>>>;
   id: Scalars['UUID']['output'];
   name: Scalars['String']['output'];
-  origin?: Maybe<GraphQLOrigin>;
+  origin?: Maybe<IOrigin>;
   originId?: Maybe<Scalars['UUID']['output']>;
-  processingMethod?: Maybe<GraphQLProcessingMethod>;
+  packs?: Maybe<Array<Maybe<IPack>>>;
+  processingMethod?: Maybe<IProcessingMethod>;
   processingMethodId?: Maybe<Scalars['UUID']['output']>;
-  roastLevel?: Maybe<GraphQLRoastLevel>;
+  roastLevel?: Maybe<IRoastLevel>;
   roastLevelId?: Maybe<Scalars['UUID']['output']>;
+  tastings?: Maybe<Array<Maybe<ITasting>>>;
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
-export type GraphQLCreateBeanInput = {
+export type ICreateBeanInput = {
   description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  origin?: InputMaybe<ICreateOriginInput>;
+};
+
+export type ICreateOriginInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['UUID']['input']>;
+  latitude?: InputMaybe<Scalars['Latitude']['input']>;
+  longitude?: InputMaybe<Scalars['Longitude']['input']>;
   name: Scalars['String']['input'];
 };
 
-export type GraphQLFlavorProfile = GraphQLBaseFlavorProfile & {
+export type IFlavorProfile = IBaseFlavorProfile & {
   __typename?: 'FlavorProfile';
-  beans: Array<Maybe<GraphQLBean>>;
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
@@ -111,19 +152,25 @@ export type GraphQLFlavorProfile = GraphQLBaseFlavorProfile & {
   value: Scalars['String']['output'];
 };
 
-export type GraphQLMutation = {
+export type IMutation = {
   __typename?: 'Mutation';
-  createBean: GraphQLBean;
+  createBean: IBean;
+  createOrigin: IOrigin;
 };
 
 
-export type GraphQLMutationCreateBeanArgs = {
-  input: GraphQLCreateBeanInput;
+export type IMutationCreateBeanArgs = {
+  input: ICreateBeanInput;
 };
 
-export type GraphQLOrigin = GraphQLBaseOrigin & {
+
+export type IMutationCreateOriginArgs = {
+  input: ICreateOriginInput;
+};
+
+export type IOrigin = IBaseOrigin & {
   __typename?: 'Origin';
-  beans?: Maybe<Array<GraphQLBean>>;
+  beans?: Maybe<Array<Maybe<IBean>>>;
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
@@ -133,9 +180,8 @@ export type GraphQLOrigin = GraphQLBaseOrigin & {
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
-export type GraphQLProcessingMethod = GraphQLBaseBeanProcessingMethod & {
-  __typename?: 'ProcessingMethod';
-  beans: Array<Maybe<GraphQLBean>>;
+export type IPack = IBasePack & {
+  __typename?: 'Pack';
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
@@ -143,20 +189,49 @@ export type GraphQLProcessingMethod = GraphQLBaseBeanProcessingMethod & {
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
-export type GraphQLQuery = {
+export type IProcessingMethod = IBaseBeanProcessingMethod & {
+  __typename?: 'ProcessingMethod';
+  createdAt: Scalars['DateTimeISO']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+export type IPurchase = IBasePurchase & {
+  __typename?: 'Purchase';
+  capacity: Scalars['Int']['output'];
+  createdAt: Scalars['DateTimeISO']['output'];
+  id: Scalars['UUID']['output'];
+  pack?: Maybe<IPack>;
+  packId: Scalars['UUID']['output'];
+  price: Scalars['Int']['output'];
+  purchasedAt: Scalars['DateTimeISO']['output'];
+  shop?: Maybe<IShop>;
+  shopId: Scalars['UUID']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+export type IQuery = {
   __typename?: 'Query';
-  bean: GraphQLBean;
-  beans: Array<Maybe<GraphQLBean>>;
+  bean: IBean;
+  beans: Array<Maybe<IBean>>;
+  origin: IOrigin;
+  origins: Array<Maybe<IOrigin>>;
 };
 
 
-export type GraphQLQueryBeanArgs = {
+export type IQueryBeanArgs = {
   beanId: Scalars['UUID']['input'];
 };
 
-export type GraphQLRoastLevel = GraphQLBaseBeanRoastLevel & {
+
+export type IQueryOriginArgs = {
+  originId: Scalars['UUID']['input'];
+};
+
+export type IRoastLevel = IBaseBeanRoastLevel & {
   __typename?: 'RoastLevel';
-  beans: Array<Maybe<GraphQLBean>>;
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
@@ -164,7 +239,15 @@ export type GraphQLRoastLevel = GraphQLBaseBeanRoastLevel & {
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
-export type GraphQLTasting = GraphQLBaseTasting & {
+export type IShop = IBaseShop & {
+  __typename?: 'Shop';
+  createdAt: Scalars['DateTimeISO']['output'];
+  id: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+export type ITasting = IBaseTasting & {
   __typename?: 'Tasting';
   acidity: Scalars['Int']['output'];
   conductedAt: Scalars['DateTimeISO']['output'];
@@ -245,250 +328,335 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 
 /** Mapping of interface types */
-export type GraphQLResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
-  BaseBean: ( GraphQLBean );
-  BaseBeanProcessingMethod: ( GraphQLProcessingMethod );
-  BaseBeanRoastLevel: ( GraphQLRoastLevel );
-  BaseFlavorProfile: ( GraphQLFlavorProfile );
-  BaseOrigin: ( GraphQLOrigin );
-  BaseTasting: ( GraphQLTasting );
+export type IResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
+  BaseBean: ( IBean );
+  BaseBeanProcessingMethod: ( IProcessingMethod );
+  BaseBeanRoastLevel: ( IRoastLevel );
+  BaseFlavorProfile: ( IFlavorProfile );
+  BaseOrigin: ( IOrigin );
+  BasePack: ( IPack );
+  BasePurchase: ( IPurchase );
+  BaseShop: ( IShop );
+  BaseTasting: ( ITasting );
 };
 
 /** Mapping between all available schema types and the resolvers types */
-export type GraphQLResolversTypes = {
-  BaseBean: ResolverTypeWrapper<GraphQLResolversInterfaceTypes<GraphQLResolversTypes>['BaseBean']>;
-  BaseBeanProcessingMethod: ResolverTypeWrapper<GraphQLResolversInterfaceTypes<GraphQLResolversTypes>['BaseBeanProcessingMethod']>;
-  BaseBeanRoastLevel: ResolverTypeWrapper<GraphQLResolversInterfaceTypes<GraphQLResolversTypes>['BaseBeanRoastLevel']>;
-  BaseFlavorProfile: ResolverTypeWrapper<GraphQLResolversInterfaceTypes<GraphQLResolversTypes>['BaseFlavorProfile']>;
-  BaseOrigin: ResolverTypeWrapper<GraphQLResolversInterfaceTypes<GraphQLResolversTypes>['BaseOrigin']>;
-  BaseTasting: ResolverTypeWrapper<GraphQLResolversInterfaceTypes<GraphQLResolversTypes>['BaseTasting']>;
-  Bean: ResolverTypeWrapper<GraphQLBean>;
+export type IResolversTypes = {
+  BaseBean: ResolverTypeWrapper<IResolversInterfaceTypes<IResolversTypes>['BaseBean']>;
+  BaseBeanProcessingMethod: ResolverTypeWrapper<IResolversInterfaceTypes<IResolversTypes>['BaseBeanProcessingMethod']>;
+  BaseBeanRoastLevel: ResolverTypeWrapper<IResolversInterfaceTypes<IResolversTypes>['BaseBeanRoastLevel']>;
+  BaseFlavorProfile: ResolverTypeWrapper<IResolversInterfaceTypes<IResolversTypes>['BaseFlavorProfile']>;
+  BaseOrigin: ResolverTypeWrapper<IResolversInterfaceTypes<IResolversTypes>['BaseOrigin']>;
+  BasePack: ResolverTypeWrapper<IResolversInterfaceTypes<IResolversTypes>['BasePack']>;
+  BasePurchase: ResolverTypeWrapper<IResolversInterfaceTypes<IResolversTypes>['BasePurchase']>;
+  BaseShop: ResolverTypeWrapper<IResolversInterfaceTypes<IResolversTypes>['BaseShop']>;
+  BaseTasting: ResolverTypeWrapper<IResolversInterfaceTypes<IResolversTypes>['BaseTasting']>;
+  Bean: ResolverTypeWrapper<IBean>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
-  CreateBeanInput: GraphQLCreateBeanInput;
+  CreateBeanInput: ICreateBeanInput;
+  CreateOriginInput: ICreateOriginInput;
   DateTimeISO: ResolverTypeWrapper<Scalars['DateTimeISO']['output']>;
-  FlavorProfile: ResolverTypeWrapper<GraphQLFlavorProfile>;
+  FlavorProfile: ResolverTypeWrapper<IFlavorProfile>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Latitude: ResolverTypeWrapper<Scalars['Latitude']['output']>;
   Longitude: ResolverTypeWrapper<Scalars['Longitude']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
-  Origin: ResolverTypeWrapper<GraphQLOrigin>;
-  ProcessingMethod: ResolverTypeWrapper<GraphQLProcessingMethod>;
+  Origin: ResolverTypeWrapper<IOrigin>;
+  Pack: ResolverTypeWrapper<IPack>;
+  ProcessingMethod: ResolverTypeWrapper<IProcessingMethod>;
+  Purchase: ResolverTypeWrapper<IPurchase>;
   Query: ResolverTypeWrapper<{}>;
-  RoastLevel: ResolverTypeWrapper<GraphQLRoastLevel>;
+  RoastLevel: ResolverTypeWrapper<IRoastLevel>;
+  Shop: ResolverTypeWrapper<IShop>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
-  Tasting: ResolverTypeWrapper<GraphQLTasting>;
+  Tasting: ResolverTypeWrapper<ITasting>;
   URL: ResolverTypeWrapper<Scalars['URL']['output']>;
   UUID: ResolverTypeWrapper<Scalars['UUID']['output']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
-export type GraphQLResolversParentTypes = {
-  BaseBean: GraphQLResolversInterfaceTypes<GraphQLResolversParentTypes>['BaseBean'];
-  BaseBeanProcessingMethod: GraphQLResolversInterfaceTypes<GraphQLResolversParentTypes>['BaseBeanProcessingMethod'];
-  BaseBeanRoastLevel: GraphQLResolversInterfaceTypes<GraphQLResolversParentTypes>['BaseBeanRoastLevel'];
-  BaseFlavorProfile: GraphQLResolversInterfaceTypes<GraphQLResolversParentTypes>['BaseFlavorProfile'];
-  BaseOrigin: GraphQLResolversInterfaceTypes<GraphQLResolversParentTypes>['BaseOrigin'];
-  BaseTasting: GraphQLResolversInterfaceTypes<GraphQLResolversParentTypes>['BaseTasting'];
-  Bean: GraphQLBean;
+export type IResolversParentTypes = {
+  BaseBean: IResolversInterfaceTypes<IResolversParentTypes>['BaseBean'];
+  BaseBeanProcessingMethod: IResolversInterfaceTypes<IResolversParentTypes>['BaseBeanProcessingMethod'];
+  BaseBeanRoastLevel: IResolversInterfaceTypes<IResolversParentTypes>['BaseBeanRoastLevel'];
+  BaseFlavorProfile: IResolversInterfaceTypes<IResolversParentTypes>['BaseFlavorProfile'];
+  BaseOrigin: IResolversInterfaceTypes<IResolversParentTypes>['BaseOrigin'];
+  BasePack: IResolversInterfaceTypes<IResolversParentTypes>['BasePack'];
+  BasePurchase: IResolversInterfaceTypes<IResolversParentTypes>['BasePurchase'];
+  BaseShop: IResolversInterfaceTypes<IResolversParentTypes>['BaseShop'];
+  BaseTasting: IResolversInterfaceTypes<IResolversParentTypes>['BaseTasting'];
+  Bean: IBean;
   Boolean: Scalars['Boolean']['output'];
-  CreateBeanInput: GraphQLCreateBeanInput;
+  CreateBeanInput: ICreateBeanInput;
+  CreateOriginInput: ICreateOriginInput;
   DateTimeISO: Scalars['DateTimeISO']['output'];
-  FlavorProfile: GraphQLFlavorProfile;
+  FlavorProfile: IFlavorProfile;
   Int: Scalars['Int']['output'];
   Latitude: Scalars['Latitude']['output'];
   Longitude: Scalars['Longitude']['output'];
   Mutation: {};
-  Origin: GraphQLOrigin;
-  ProcessingMethod: GraphQLProcessingMethod;
+  Origin: IOrigin;
+  Pack: IPack;
+  ProcessingMethod: IProcessingMethod;
+  Purchase: IPurchase;
   Query: {};
-  RoastLevel: GraphQLRoastLevel;
+  RoastLevel: IRoastLevel;
+  Shop: IShop;
   String: Scalars['String']['output'];
-  Tasting: GraphQLTasting;
+  Tasting: ITasting;
   URL: Scalars['URL']['output'];
   UUID: Scalars['UUID']['output'];
 };
 
-export type GraphQLBaseBeanResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['BaseBean'] = GraphQLResolversParentTypes['BaseBean']> = {
+export type IBaseBeanResolvers<ContextType = Context, ParentType extends IResolversParentTypes['BaseBean'] = IResolversParentTypes['BaseBean']> = {
   __resolveType: TypeResolveFn<'Bean', ParentType, ContextType>;
-  createdAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  description?: Resolver<Maybe<GraphQLResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<GraphQLResolversTypes['UUID'], ParentType, ContextType>;
-  name?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  originId?: Resolver<Maybe<GraphQLResolversTypes['UUID']>, ParentType, ContextType>;
-  processingMethodId?: Resolver<Maybe<GraphQLResolversTypes['UUID']>, ParentType, ContextType>;
-  roastLevelId?: Resolver<Maybe<GraphQLResolversTypes['UUID']>, ParentType, ContextType>;
-  updatedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  originId?: Resolver<Maybe<IResolversTypes['UUID']>, ParentType, ContextType>;
+  processingMethodId?: Resolver<Maybe<IResolversTypes['UUID']>, ParentType, ContextType>;
+  roastLevelId?: Resolver<Maybe<IResolversTypes['UUID']>, ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
 };
 
-export type GraphQLBaseBeanProcessingMethodResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['BaseBeanProcessingMethod'] = GraphQLResolversParentTypes['BaseBeanProcessingMethod']> = {
+export type IBaseBeanProcessingMethodResolvers<ContextType = Context, ParentType extends IResolversParentTypes['BaseBeanProcessingMethod'] = IResolversParentTypes['BaseBeanProcessingMethod']> = {
   __resolveType: TypeResolveFn<'ProcessingMethod', ParentType, ContextType>;
-  createdAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  description?: Resolver<Maybe<GraphQLResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<GraphQLResolversTypes['UUID'], ParentType, ContextType>;
-  name?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
 };
 
-export type GraphQLBaseBeanRoastLevelResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['BaseBeanRoastLevel'] = GraphQLResolversParentTypes['BaseBeanRoastLevel']> = {
+export type IBaseBeanRoastLevelResolvers<ContextType = Context, ParentType extends IResolversParentTypes['BaseBeanRoastLevel'] = IResolversParentTypes['BaseBeanRoastLevel']> = {
   __resolveType: TypeResolveFn<'RoastLevel', ParentType, ContextType>;
-  createdAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  description?: Resolver<Maybe<GraphQLResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<GraphQLResolversTypes['UUID'], ParentType, ContextType>;
-  name?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
 };
 
-export type GraphQLBaseFlavorProfileResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['BaseFlavorProfile'] = GraphQLResolversParentTypes['BaseFlavorProfile']> = {
+export type IBaseFlavorProfileResolvers<ContextType = Context, ParentType extends IResolversParentTypes['BaseFlavorProfile'] = IResolversParentTypes['BaseFlavorProfile']> = {
   __resolveType: TypeResolveFn<'FlavorProfile', ParentType, ContextType>;
-  createdAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  description?: Resolver<Maybe<GraphQLResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<GraphQLResolversTypes['UUID'], ParentType, ContextType>;
-  label?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  value?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  label?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  value?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
 };
 
-export type GraphQLBaseOriginResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['BaseOrigin'] = GraphQLResolversParentTypes['BaseOrigin']> = {
+export type IBaseOriginResolvers<ContextType = Context, ParentType extends IResolversParentTypes['BaseOrigin'] = IResolversParentTypes['BaseOrigin']> = {
   __resolveType: TypeResolveFn<'Origin', ParentType, ContextType>;
-  createdAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  description?: Resolver<Maybe<GraphQLResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<GraphQLResolversTypes['UUID'], ParentType, ContextType>;
-  latitude?: Resolver<Maybe<GraphQLResolversTypes['Latitude']>, ParentType, ContextType>;
-  longitude?: Resolver<Maybe<GraphQLResolversTypes['Longitude']>, ParentType, ContextType>;
-  name?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  latitude?: Resolver<Maybe<IResolversTypes['Latitude']>, ParentType, ContextType>;
+  longitude?: Resolver<Maybe<IResolversTypes['Longitude']>, ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
 };
 
-export type GraphQLBaseTastingResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['BaseTasting'] = GraphQLResolversParentTypes['BaseTasting']> = {
+export type IBasePackResolvers<ContextType = Context, ParentType extends IResolversParentTypes['BasePack'] = IResolversParentTypes['BasePack']> = {
+  __resolveType: TypeResolveFn<'Pack', ParentType, ContextType>;
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+};
+
+export type IBasePurchaseResolvers<ContextType = Context, ParentType extends IResolversParentTypes['BasePurchase'] = IResolversParentTypes['BasePurchase']> = {
+  __resolveType: TypeResolveFn<'Purchase', ParentType, ContextType>;
+  capacity?: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  packId?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  price?: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
+  purchasedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  shopId?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+};
+
+export type IBaseShopResolvers<ContextType = Context, ParentType extends IResolversParentTypes['BaseShop'] = IResolversParentTypes['BaseShop']> = {
+  __resolveType: TypeResolveFn<'Shop', ParentType, ContextType>;
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+};
+
+export type IBaseTastingResolvers<ContextType = Context, ParentType extends IResolversParentTypes['BaseTasting'] = IResolversParentTypes['BaseTasting']> = {
   __resolveType: TypeResolveFn<'Tasting', ParentType, ContextType>;
-  acidity?: Resolver<GraphQLResolversTypes['Int'], ParentType, ContextType>;
-  conductedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  createdAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  description?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GraphQLResolversTypes['UUID'], ParentType, ContextType>;
-  name?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  richness?: Resolver<GraphQLResolversTypes['Int'], ParentType, ContextType>;
-  updatedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  acidity?: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
+  conductedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  richness?: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
 };
 
-export type GraphQLBeanResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['Bean'] = GraphQLResolversParentTypes['Bean']> = {
-  createdAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  description?: Resolver<Maybe<GraphQLResolversTypes['String']>, ParentType, ContextType>;
-  flavorProfile?: Resolver<Maybe<GraphQLResolversTypes['FlavorProfile']>, ParentType, ContextType>;
-  id?: Resolver<GraphQLResolversTypes['UUID'], ParentType, ContextType>;
-  name?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  origin?: Resolver<Maybe<GraphQLResolversTypes['Origin']>, ParentType, ContextType>;
-  originId?: Resolver<Maybe<GraphQLResolversTypes['UUID']>, ParentType, ContextType>;
-  processingMethod?: Resolver<Maybe<GraphQLResolversTypes['ProcessingMethod']>, ParentType, ContextType>;
-  processingMethodId?: Resolver<Maybe<GraphQLResolversTypes['UUID']>, ParentType, ContextType>;
-  roastLevel?: Resolver<Maybe<GraphQLResolversTypes['RoastLevel']>, ParentType, ContextType>;
-  roastLevelId?: Resolver<Maybe<GraphQLResolversTypes['UUID']>, ParentType, ContextType>;
-  updatedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
+export type IBeanResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Bean'] = IResolversParentTypes['Bean']> = {
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  flavorProfiles?: Resolver<Maybe<Array<Maybe<IResolversTypes['FlavorProfile']>>>, ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  origin?: Resolver<Maybe<IResolversTypes['Origin']>, ParentType, ContextType>;
+  originId?: Resolver<Maybe<IResolversTypes['UUID']>, ParentType, ContextType>;
+  packs?: Resolver<Maybe<Array<Maybe<IResolversTypes['Pack']>>>, ParentType, ContextType>;
+  processingMethod?: Resolver<Maybe<IResolversTypes['ProcessingMethod']>, ParentType, ContextType>;
+  processingMethodId?: Resolver<Maybe<IResolversTypes['UUID']>, ParentType, ContextType>;
+  roastLevel?: Resolver<Maybe<IResolversTypes['RoastLevel']>, ParentType, ContextType>;
+  roastLevelId?: Resolver<Maybe<IResolversTypes['UUID']>, ParentType, ContextType>;
+  tastings?: Resolver<Maybe<Array<Maybe<IResolversTypes['Tasting']>>>, ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export interface GraphQLDateTimeIsoScalarConfig extends GraphQLScalarTypeConfig<GraphQLResolversTypes['DateTimeISO'], any> {
+export interface IDateTimeIsoScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['DateTimeISO'], any> {
   name: 'DateTimeISO';
 }
 
-export type GraphQLFlavorProfileResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['FlavorProfile'] = GraphQLResolversParentTypes['FlavorProfile']> = {
-  beans?: Resolver<Array<Maybe<GraphQLResolversTypes['Bean']>>, ParentType, ContextType>;
-  createdAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  description?: Resolver<Maybe<GraphQLResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<GraphQLResolversTypes['UUID'], ParentType, ContextType>;
-  label?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  value?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
+export type IFlavorProfileResolvers<ContextType = Context, ParentType extends IResolversParentTypes['FlavorProfile'] = IResolversParentTypes['FlavorProfile']> = {
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  label?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  value?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export interface GraphQLLatitudeScalarConfig extends GraphQLScalarTypeConfig<GraphQLResolversTypes['Latitude'], any> {
+export interface ILatitudeScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['Latitude'], any> {
   name: 'Latitude';
 }
 
-export interface GraphQLLongitudeScalarConfig extends GraphQLScalarTypeConfig<GraphQLResolversTypes['Longitude'], any> {
+export interface ILongitudeScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['Longitude'], any> {
   name: 'Longitude';
 }
 
-export type GraphQLMutationResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['Mutation'] = GraphQLResolversParentTypes['Mutation']> = {
-  createBean?: Resolver<GraphQLResolversTypes['Bean'], ParentType, ContextType, RequireFields<GraphQLMutationCreateBeanArgs, 'input'>>;
+export type IMutationResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
+  createBean?: Resolver<IResolversTypes['Bean'], ParentType, ContextType, RequireFields<IMutationCreateBeanArgs, 'input'>>;
+  createOrigin?: Resolver<IResolversTypes['Origin'], ParentType, ContextType, RequireFields<IMutationCreateOriginArgs, 'input'>>;
 };
 
-export type GraphQLOriginResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['Origin'] = GraphQLResolversParentTypes['Origin']> = {
-  beans?: Resolver<Maybe<Array<GraphQLResolversTypes['Bean']>>, ParentType, ContextType>;
-  createdAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  description?: Resolver<Maybe<GraphQLResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<GraphQLResolversTypes['UUID'], ParentType, ContextType>;
-  latitude?: Resolver<Maybe<GraphQLResolversTypes['Latitude']>, ParentType, ContextType>;
-  longitude?: Resolver<Maybe<GraphQLResolversTypes['Longitude']>, ParentType, ContextType>;
-  name?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
+export type IOriginResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Origin'] = IResolversParentTypes['Origin']> = {
+  beans?: Resolver<Maybe<Array<Maybe<IResolversTypes['Bean']>>>, ParentType, ContextType>;
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  latitude?: Resolver<Maybe<IResolversTypes['Latitude']>, ParentType, ContextType>;
+  longitude?: Resolver<Maybe<IResolversTypes['Longitude']>, ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GraphQLProcessingMethodResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['ProcessingMethod'] = GraphQLResolversParentTypes['ProcessingMethod']> = {
-  beans?: Resolver<Array<Maybe<GraphQLResolversTypes['Bean']>>, ParentType, ContextType>;
-  createdAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  description?: Resolver<Maybe<GraphQLResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<GraphQLResolversTypes['UUID'], ParentType, ContextType>;
-  name?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
+export type IPackResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Pack'] = IResolversParentTypes['Pack']> = {
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GraphQLQueryResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['Query'] = GraphQLResolversParentTypes['Query']> = {
-  bean?: Resolver<GraphQLResolversTypes['Bean'], ParentType, ContextType, RequireFields<GraphQLQueryBeanArgs, 'beanId'>>;
-  beans?: Resolver<Array<Maybe<GraphQLResolversTypes['Bean']>>, ParentType, ContextType>;
-};
-
-export type GraphQLRoastLevelResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['RoastLevel'] = GraphQLResolversParentTypes['RoastLevel']> = {
-  beans?: Resolver<Array<Maybe<GraphQLResolversTypes['Bean']>>, ParentType, ContextType>;
-  createdAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  description?: Resolver<Maybe<GraphQLResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<GraphQLResolversTypes['UUID'], ParentType, ContextType>;
-  name?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
+export type IProcessingMethodResolvers<ContextType = Context, ParentType extends IResolversParentTypes['ProcessingMethod'] = IResolversParentTypes['ProcessingMethod']> = {
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GraphQLTastingResolvers<ContextType = Context, ParentType extends GraphQLResolversParentTypes['Tasting'] = GraphQLResolversParentTypes['Tasting']> = {
-  acidity?: Resolver<GraphQLResolversTypes['Int'], ParentType, ContextType>;
-  conductedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  createdAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
-  description?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GraphQLResolversTypes['UUID'], ParentType, ContextType>;
-  name?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
-  richness?: Resolver<GraphQLResolversTypes['Int'], ParentType, ContextType>;
-  updatedAt?: Resolver<GraphQLResolversTypes['DateTimeISO'], ParentType, ContextType>;
+export type IPurchaseResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Purchase'] = IResolversParentTypes['Purchase']> = {
+  capacity?: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  pack?: Resolver<Maybe<IResolversTypes['Pack']>, ParentType, ContextType>;
+  packId?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  price?: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
+  purchasedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  shop?: Resolver<Maybe<IResolversTypes['Shop']>, ParentType, ContextType>;
+  shopId?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export interface GraphQLUrlScalarConfig extends GraphQLScalarTypeConfig<GraphQLResolversTypes['URL'], any> {
+export type IQueryResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
+  bean?: Resolver<IResolversTypes['Bean'], ParentType, ContextType, RequireFields<IQueryBeanArgs, 'beanId'>>;
+  beans?: Resolver<Array<Maybe<IResolversTypes['Bean']>>, ParentType, ContextType>;
+  origin?: Resolver<IResolversTypes['Origin'], ParentType, ContextType, RequireFields<IQueryOriginArgs, 'originId'>>;
+  origins?: Resolver<Array<Maybe<IResolversTypes['Origin']>>, ParentType, ContextType>;
+};
+
+export type IRoastLevelResolvers<ContextType = Context, ParentType extends IResolversParentTypes['RoastLevel'] = IResolversParentTypes['RoastLevel']> = {
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type IShopResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Shop'] = IResolversParentTypes['Shop']> = {
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ITastingResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Tasting'] = IResolversParentTypes['Tasting']> = {
+  acidity?: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
+  conductedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  description?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  richness?: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
+  updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export interface IUrlScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['URL'], any> {
   name: 'URL';
 }
 
-export interface GraphQLUuidScalarConfig extends GraphQLScalarTypeConfig<GraphQLResolversTypes['UUID'], any> {
+export interface IUuidScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['UUID'], any> {
   name: 'UUID';
 }
 
-export type GraphQLResolvers<ContextType = Context> = {
-  BaseBean?: GraphQLBaseBeanResolvers<ContextType>;
-  BaseBeanProcessingMethod?: GraphQLBaseBeanProcessingMethodResolvers<ContextType>;
-  BaseBeanRoastLevel?: GraphQLBaseBeanRoastLevelResolvers<ContextType>;
-  BaseFlavorProfile?: GraphQLBaseFlavorProfileResolvers<ContextType>;
-  BaseOrigin?: GraphQLBaseOriginResolvers<ContextType>;
-  BaseTasting?: GraphQLBaseTastingResolvers<ContextType>;
-  Bean?: GraphQLBeanResolvers<ContextType>;
+export type IResolvers<ContextType = Context> = {
+  BaseBean?: IBaseBeanResolvers<ContextType>;
+  BaseBeanProcessingMethod?: IBaseBeanProcessingMethodResolvers<ContextType>;
+  BaseBeanRoastLevel?: IBaseBeanRoastLevelResolvers<ContextType>;
+  BaseFlavorProfile?: IBaseFlavorProfileResolvers<ContextType>;
+  BaseOrigin?: IBaseOriginResolvers<ContextType>;
+  BasePack?: IBasePackResolvers<ContextType>;
+  BasePurchase?: IBasePurchaseResolvers<ContextType>;
+  BaseShop?: IBaseShopResolvers<ContextType>;
+  BaseTasting?: IBaseTastingResolvers<ContextType>;
+  Bean?: IBeanResolvers<ContextType>;
   DateTimeISO?: GraphQLScalarType;
-  FlavorProfile?: GraphQLFlavorProfileResolvers<ContextType>;
+  FlavorProfile?: IFlavorProfileResolvers<ContextType>;
   Latitude?: GraphQLScalarType;
   Longitude?: GraphQLScalarType;
-  Mutation?: GraphQLMutationResolvers<ContextType>;
-  Origin?: GraphQLOriginResolvers<ContextType>;
-  ProcessingMethod?: GraphQLProcessingMethodResolvers<ContextType>;
-  Query?: GraphQLQueryResolvers<ContextType>;
-  RoastLevel?: GraphQLRoastLevelResolvers<ContextType>;
-  Tasting?: GraphQLTastingResolvers<ContextType>;
+  Mutation?: IMutationResolvers<ContextType>;
+  Origin?: IOriginResolvers<ContextType>;
+  Pack?: IPackResolvers<ContextType>;
+  ProcessingMethod?: IProcessingMethodResolvers<ContextType>;
+  Purchase?: IPurchaseResolvers<ContextType>;
+  Query?: IQueryResolvers<ContextType>;
+  RoastLevel?: IRoastLevelResolvers<ContextType>;
+  Shop?: IShopResolvers<ContextType>;
+  Tasting?: ITastingResolvers<ContextType>;
   URL?: GraphQLScalarType;
   UUID?: GraphQLScalarType;
 };

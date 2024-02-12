@@ -23,8 +23,8 @@ export const scalarResolvers = {
 };
 
 export const scalarMapForCodegen = {
-  [GraphQLLatitude.name]: 'number | string',
-  [GraphQLLongitude.name]: 'number | string',
+  [GraphQLLatitude.name]: 'number',
+  [GraphQLLongitude.name]: 'number',
   [GraphQLURL.name]: 'string',
   [GraphQLDateTimeISO.name]: 'Date',
   [GraphQLUUID.name]: 'string',

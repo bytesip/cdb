@@ -13,6 +13,7 @@ export const ProcessingMethodSchema = /* GraphQL */ `
     createdAt: DateTimeISO!
     updatedAt: DateTimeISO!
     # NOTE: relations
-    beans: [Bean]!
+    # NOTE: reverse relations
+    # beans: [Bean]!
   }
 `;

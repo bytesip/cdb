@@ -209,10 +209,7 @@ CREATE UNIQUE INDEX "shops_name_key" ON "shops"("name");
 CREATE UNIQUE INDEX "shop_locations_shop_id_key" ON "shop_locations"("shop_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "pack_purchases_pack_id_key" ON "pack_purchases"("pack_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "pack_purchases_shop_id_key" ON "pack_purchases"("shop_id");
+CREATE UNIQUE INDEX "pack_purchases_pack_id_shop_id_key" ON "pack_purchases"("pack_id", "shop_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "sip_methods_name_key" ON "sip_methods"("name");
@@ -249,9 +246,6 @@ ALTER TABLE "bean_tastings" ADD CONSTRAINT "bean_tastings_tasting_id_fkey" FOREI
 
 -- AddForeignKey
 ALTER TABLE "bean_tastings" ADD CONSTRAINT "bean_tastings_bean_id_fkey" FOREIGN KEY ("bean_id") REFERENCES "beans"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "shop_locations" ADD CONSTRAINT "shop_locations_shop_id_fkey" FOREIGN KEY ("shop_id") REFERENCES "shops"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "pack_purchases" ADD CONSTRAINT "pack_purchases_pack_id_fkey" FOREIGN KEY ("pack_id") REFERENCES "packs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

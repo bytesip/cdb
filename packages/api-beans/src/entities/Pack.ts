@@ -1,21 +1,21 @@
-export const FlavorProfileSchema = /* GraphQL */ `
-  interface BaseFlavorProfile {
+export const PackSchema = /* GraphQL */ `
+  interface BasePack {
     id: UUID!
-    value: String!
-    label: String!
+    name: String!
     description: String
     createdAt: DateTimeISO!
     updatedAt: DateTimeISO!
   }
-  type FlavorProfile implements BaseFlavorProfile {
+
+  type Pack implements BasePack {
     id: UUID!
-    value: String!
-    label: String!
+    name: String!
     description: String
     createdAt: DateTimeISO!
     updatedAt: DateTimeISO!
     # NOTE: relations
     # NOTE: reverse relations
     # beans: [Bean]!
+    # purchases: [Purchase]!
   }
 `;

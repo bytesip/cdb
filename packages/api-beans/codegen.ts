@@ -9,12 +9,12 @@ const sharedPluginConfig: Pick<
   scalars: {
     ...scalarMapForCodegen,
   },
-  typesPrefix: 'GraphQL',
+  typesPrefix: 'I',
 };
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: 'http://localhost:4010/graphql',
+  schema: 'src/.generated//schema.graphql',
   debug: true,
   generates: {
     'src/.generated/graphql.ts': {
