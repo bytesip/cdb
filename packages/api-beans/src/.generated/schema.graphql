@@ -67,6 +67,7 @@ type FlavorProfile implements BaseFlavorProfile {
   description: String
   createdAt: DateTimeISO!
   updatedAt: DateTimeISO!
+  beans: [Bean]
 }
 
 interface BaseOrigin {
@@ -104,6 +105,8 @@ type Pack implements BasePack {
   description: String
   createdAt: DateTimeISO!
   updatedAt: DateTimeISO!
+  beans: [Bean]
+  purchases: [Purchase]
 }
 
 interface BaseBeanProcessingMethod {
@@ -120,6 +123,7 @@ type ProcessingMethod implements BaseBeanProcessingMethod {
   description: String
   createdAt: DateTimeISO!
   updatedAt: DateTimeISO!
+  beans: [Bean]
 }
 
 interface BasePurchase {
@@ -160,6 +164,7 @@ type RoastLevel implements BaseBeanRoastLevel {
   description: String
   createdAt: DateTimeISO!
   updatedAt: DateTimeISO!
+  beans: [Bean]
 }
 
 interface BaseShop {
@@ -196,6 +201,7 @@ type Tasting implements BaseTasting {
   conductedAt: DateTimeISO!
   createdAt: DateTimeISO!
   updatedAt: DateTimeISO!
+  beans: [Bean]
 }
 
 input CreateBeanInput {

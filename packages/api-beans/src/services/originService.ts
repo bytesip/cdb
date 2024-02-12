@@ -26,6 +26,11 @@ export class OriginService {
   }
 
   async createOrigin(input: ICreateOriginInput) {
-    return await this.originRepository.create(input);
+    return await this.originRepository.create({
+      name: input.name,
+      description: input.description,
+      latitude: input.latitude ?? null,
+      longitude: input.longitude ?? null,
+    });
   }
 }

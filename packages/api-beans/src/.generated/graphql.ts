@@ -144,6 +144,7 @@ export type ICreateOriginInput = {
 
 export type IFlavorProfile = IBaseFlavorProfile & {
   __typename?: 'FlavorProfile';
+  beans?: Maybe<Array<Maybe<IBean>>>;
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
@@ -182,15 +183,18 @@ export type IOrigin = IBaseOrigin & {
 
 export type IPack = IBasePack & {
   __typename?: 'Pack';
+  beans?: Maybe<Array<Maybe<IBean>>>;
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
   name: Scalars['String']['output'];
+  purchases?: Maybe<Array<Maybe<IPurchase>>>;
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
 export type IProcessingMethod = IBaseBeanProcessingMethod & {
   __typename?: 'ProcessingMethod';
+  beans?: Maybe<Array<Maybe<IBean>>>;
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
@@ -232,6 +236,7 @@ export type IQueryOriginArgs = {
 
 export type IRoastLevel = IBaseBeanRoastLevel & {
   __typename?: 'RoastLevel';
+  beans?: Maybe<Array<Maybe<IBean>>>;
   createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['UUID']['output'];
@@ -250,6 +255,7 @@ export type IShop = IBaseShop & {
 export type ITasting = IBaseTasting & {
   __typename?: 'Tasting';
   acidity: Scalars['Int']['output'];
+  beans?: Maybe<Array<Maybe<IBean>>>;
   conductedAt: Scalars['DateTimeISO']['output'];
   createdAt: Scalars['DateTimeISO']['output'];
   description: Scalars['String']['output'];
@@ -523,6 +529,7 @@ export interface IDateTimeIsoScalarConfig extends GraphQLScalarTypeConfig<IResol
 }
 
 export type IFlavorProfileResolvers<ContextType = Context, ParentType extends IResolversParentTypes['FlavorProfile'] = IResolversParentTypes['FlavorProfile']> = {
+  beans?: Resolver<Maybe<Array<Maybe<IResolversTypes['Bean']>>>, ParentType, ContextType>;
   createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
   description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
@@ -558,15 +565,18 @@ export type IOriginResolvers<ContextType = Context, ParentType extends IResolver
 };
 
 export type IPackResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Pack'] = IResolversParentTypes['Pack']> = {
+  beans?: Resolver<Maybe<Array<Maybe<IResolversTypes['Bean']>>>, ParentType, ContextType>;
   createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
   description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
   name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  purchases?: Resolver<Maybe<Array<Maybe<IResolversTypes['Purchase']>>>, ParentType, ContextType>;
   updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type IProcessingMethodResolvers<ContextType = Context, ParentType extends IResolversParentTypes['ProcessingMethod'] = IResolversParentTypes['ProcessingMethod']> = {
+  beans?: Resolver<Maybe<Array<Maybe<IResolversTypes['Bean']>>>, ParentType, ContextType>;
   createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
   description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
@@ -597,6 +607,7 @@ export type IQueryResolvers<ContextType = Context, ParentType extends IResolvers
 };
 
 export type IRoastLevelResolvers<ContextType = Context, ParentType extends IResolversParentTypes['RoastLevel'] = IResolversParentTypes['RoastLevel']> = {
+  beans?: Resolver<Maybe<Array<Maybe<IResolversTypes['Bean']>>>, ParentType, ContextType>;
   createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
   description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<IResolversTypes['UUID'], ParentType, ContextType>;
@@ -615,6 +626,7 @@ export type IShopResolvers<ContextType = Context, ParentType extends IResolversP
 
 export type ITastingResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Tasting'] = IResolversParentTypes['Tasting']> = {
   acidity?: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
+  beans?: Resolver<Maybe<Array<Maybe<IResolversTypes['Bean']>>>, ParentType, ContextType>;
   conductedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
   createdAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
   description?: Resolver<IResolversTypes['String'], ParentType, ContextType>;

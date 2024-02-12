@@ -22,5 +22,6 @@ export const PurchaseSchema = /* GraphQL */ `
     # NOTE: relations
     pack: Pack
     shop: Shop
+    # NOTE: reverse relations
   }
 `;
