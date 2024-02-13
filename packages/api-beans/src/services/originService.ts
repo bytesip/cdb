@@ -1,6 +1,7 @@
 import {Inject, Service} from 'typedi';
 import {ICreateOriginInput, IOrigin} from '@/.generated/graphql';
 import {OriginRepository} from '@/repositories';
+import {ErrorCapture} from '@/graphql/error';
 
 @Service('originService')
 export class OriginService {
@@ -25,6 +26,7 @@ export class OriginService {
     );
   }
 
+  @ErrorCapture()
   async createOrigin(input: ICreateOriginInput) {
     return await this.originRepository.create({
       name: input.name,

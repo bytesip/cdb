@@ -128,6 +128,12 @@ export type IBean = IBaseBean & {
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
+export type IConflictError = IGraphQlError & {
+  __typename?: 'ConflictError';
+  code: Scalars['String']['output'];
+  message: Scalars['String']['output'];
+};
+
 export type ICreateBeanInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -142,6 +148,8 @@ export type ICreateOriginInput = {
   name: Scalars['String']['input'];
 };
 
+export type ICreateOriginResults = IConflictError | IOrigin;
+
 export type IFlavorProfile = IBaseFlavorProfile & {
   __typename?: 'FlavorProfile';
   beans?: Maybe<Array<Maybe<IBean>>>;
@@ -153,10 +161,15 @@ export type IFlavorProfile = IBaseFlavorProfile & {
   value: Scalars['String']['output'];
 };
 
+export type IGraphQlError = {
+  code: Scalars['String']['output'];
+  message: Scalars['String']['output'];
+};
+
 export type IMutation = {
   __typename?: 'Mutation';
   createBean: IBean;
-  createOrigin: IOrigin;
+  createOrigin: ICreateOriginResults;
 };
 
 
@@ -167,6 +180,14 @@ export type IMutationCreateBeanArgs = {
 
 export type IMutationCreateOriginArgs = {
   input: ICreateOriginInput;
+};
+
+export type INotFoundError = IGraphQlError & {
+  __typename?: 'NotFoundError';
+  code: Scalars['String']['output'];
+  entity?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  message: Scalars['String']['output'];
 };
 
 export type IOrigin = IBaseOrigin & {
@@ -332,6 +353,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+/** Mapping of union types */
+export type IResolversUnionTypes<RefType extends Record<string, unknown>> = {
+  CreateOriginResults: ( IConflictError ) | ( IOrigin );
+};
 
 /** Mapping of interface types */
 export type IResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
@@ -344,6 +369,7 @@ export type IResolversInterfaceTypes<RefType extends Record<string, unknown>> = 
   BasePurchase: ( IPurchase );
   BaseShop: ( IShop );
   BaseTasting: ( ITasting );
+  GraphQLError: ( IConflictError ) | ( INotFoundError );
 };
 
 /** Mapping between all available schema types and the resolvers types */
@@ -359,14 +385,18 @@ export type IResolversTypes = {
   BaseTasting: ResolverTypeWrapper<IResolversInterfaceTypes<IResolversTypes>['BaseTasting']>;
   Bean: ResolverTypeWrapper<IBean>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  ConflictError: ResolverTypeWrapper<IConflictError>;
   CreateBeanInput: ICreateBeanInput;
   CreateOriginInput: ICreateOriginInput;
+  CreateOriginResults: ResolverTypeWrapper<IResolversUnionTypes<IResolversTypes>['CreateOriginResults']>;
   DateTimeISO: ResolverTypeWrapper<Scalars['DateTimeISO']['output']>;
   FlavorProfile: ResolverTypeWrapper<IFlavorProfile>;
+  GraphQLError: ResolverTypeWrapper<IResolversInterfaceTypes<IResolversTypes>['GraphQLError']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Latitude: ResolverTypeWrapper<Scalars['Latitude']['output']>;
   Longitude: ResolverTypeWrapper<Scalars['Longitude']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
+  NotFoundError: ResolverTypeWrapper<INotFoundError>;
   Origin: ResolverTypeWrapper<IOrigin>;
   Pack: ResolverTypeWrapper<IPack>;
   ProcessingMethod: ResolverTypeWrapper<IProcessingMethod>;
@@ -393,14 +423,18 @@ export type IResolversParentTypes = {
   BaseTasting: IResolversInterfaceTypes<IResolversParentTypes>['BaseTasting'];
   Bean: IBean;
   Boolean: Scalars['Boolean']['output'];
+  ConflictError: IConflictError;
   CreateBeanInput: ICreateBeanInput;
   CreateOriginInput: ICreateOriginInput;
+  CreateOriginResults: IResolversUnionTypes<IResolversParentTypes>['CreateOriginResults'];
   DateTimeISO: Scalars['DateTimeISO']['output'];
   FlavorProfile: IFlavorProfile;
+  GraphQLError: IResolversInterfaceTypes<IResolversParentTypes>['GraphQLError'];
   Int: Scalars['Int']['output'];
   Latitude: Scalars['Latitude']['output'];
   Longitude: Scalars['Longitude']['output'];
   Mutation: {};
+  NotFoundError: INotFoundError;
   Origin: IOrigin;
   Pack: IPack;
   ProcessingMethod: IProcessingMethod;
@@ -524,6 +558,16 @@ export type IBeanResolvers<ContextType = Context, ParentType extends IResolversP
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type IConflictErrorResolvers<ContextType = Context, ParentType extends IResolversParentTypes['ConflictError'] = IResolversParentTypes['ConflictError']> = {
+  code?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  message?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ICreateOriginResultsResolvers<ContextType = Context, ParentType extends IResolversParentTypes['CreateOriginResults'] = IResolversParentTypes['CreateOriginResults']> = {
+  __resolveType: TypeResolveFn<'ConflictError' | 'Origin', ParentType, ContextType>;
+};
+
 export interface IDateTimeIsoScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['DateTimeISO'], any> {
   name: 'DateTimeISO';
 }
@@ -539,6 +583,12 @@ export type IFlavorProfileResolvers<ContextType = Context, ParentType extends IR
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type IGraphQlErrorResolvers<ContextType = Context, ParentType extends IResolversParentTypes['GraphQLError'] = IResolversParentTypes['GraphQLError']> = {
+  __resolveType: TypeResolveFn<'ConflictError' | 'NotFoundError', ParentType, ContextType>;
+  code?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  message?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+};
+
 export interface ILatitudeScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['Latitude'], any> {
   name: 'Latitude';
 }
@@ -549,7 +599,15 @@ export interface ILongitudeScalarConfig extends GraphQLScalarTypeConfig<IResolve
 
 export type IMutationResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
   createBean?: Resolver<IResolversTypes['Bean'], ParentType, ContextType, RequireFields<IMutationCreateBeanArgs, 'input'>>;
-  createOrigin?: Resolver<IResolversTypes['Origin'], ParentType, ContextType, RequireFields<IMutationCreateOriginArgs, 'input'>>;
+  createOrigin?: Resolver<IResolversTypes['CreateOriginResults'], ParentType, ContextType, RequireFields<IMutationCreateOriginArgs, 'input'>>;
+};
+
+export type INotFoundErrorResolvers<ContextType = Context, ParentType extends IResolversParentTypes['NotFoundError'] = IResolversParentTypes['NotFoundError']> = {
+  code?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  entity?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  message?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type IOriginResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Origin'] = IResolversParentTypes['Origin']> = {
@@ -656,11 +714,15 @@ export type IResolvers<ContextType = Context> = {
   BaseShop?: IBaseShopResolvers<ContextType>;
   BaseTasting?: IBaseTastingResolvers<ContextType>;
   Bean?: IBeanResolvers<ContextType>;
+  ConflictError?: IConflictErrorResolvers<ContextType>;
+  CreateOriginResults?: ICreateOriginResultsResolvers<ContextType>;
   DateTimeISO?: GraphQLScalarType;
   FlavorProfile?: IFlavorProfileResolvers<ContextType>;
+  GraphQLError?: IGraphQlErrorResolvers<ContextType>;
   Latitude?: GraphQLScalarType;
   Longitude?: GraphQLScalarType;
   Mutation?: IMutationResolvers<ContextType>;
+  NotFoundError?: INotFoundErrorResolvers<ContextType>;
   Origin?: IOriginResolvers<ContextType>;
   Pack?: IPackResolvers<ContextType>;
   ProcessingMethod?: IProcessingMethodResolvers<ContextType>;

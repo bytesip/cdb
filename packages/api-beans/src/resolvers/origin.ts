@@ -13,8 +13,9 @@ export const originResolverDefs = /* GraphQL */ `
     longitude: Longitude
     latitude: Latitude
   }
+  union CreateOriginResults = Origin | ConflictError
   type Mutation {
-    createOrigin(input: CreateOriginInput!): Origin!
+    createOrigin(input: CreateOriginInput!): CreateOriginResults!
   }
 `;
 

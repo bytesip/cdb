@@ -212,7 +212,7 @@ input CreateBeanInput {
 
 type Mutation {
   createBean(input: CreateBeanInput!): Bean!
-  createOrigin(input: CreateOriginInput!): Origin!
+  createOrigin(input: CreateOriginInput!): CreateOriginResults!
 }
 
 type Query {
@@ -228,4 +228,23 @@ input CreateOriginInput {
   description: String
   longitude: Longitude
   latitude: Latitude
+}
+
+union CreateOriginResults = Origin | ConflictError
+
+interface GraphQLError {
+  code: String!
+  message: String!
+}
+
+type NotFoundError implements GraphQLError {
+  code: String!
+  message: String!
+  entity: String
+  id: String
+}
+
+type ConflictError implements GraphQLError {
+  code: String!
+  message: String!
 }

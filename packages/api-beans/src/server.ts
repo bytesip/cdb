@@ -5,12 +5,14 @@ import {mergeResolvers, mergeTypeDefs} from '@graphql-tools/merge';
 import {entitySchemas} from './entities';
 import {scalarDefs, scalarResolvers} from '@/graphql/scalars';
 import {createContext, initializeDIContainer} from '@/graphql/context';
+import {ErrorSchema} from '@/graphql/error';
 import {resolverTypeDefs, resolvers as baseResolvers} from './resolvers';
 
 export const typeDefs = mergeTypeDefs([
   scalarDefs,
   ...entitySchemas,
   ...resolverTypeDefs,
+  ErrorSchema,
 ]);
 const resolvers = mergeResolvers([scalarResolvers, ...baseResolvers]);
 export const schema = createSchema({

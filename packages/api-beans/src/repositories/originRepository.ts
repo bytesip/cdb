@@ -2,6 +2,7 @@ import {PrismaClient, Prisma} from '@cdb/prisma';
 import {Service, Inject} from 'typedi';
 
 import {ICreateOriginInput, IOrigin} from '@/.generated/graphql';
+import {ErrorCapture} from '@/graphql/error';
 
 @Service('originRepository')
 export class OriginRepository {
