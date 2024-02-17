@@ -75,11 +75,14 @@ const errorHandler = (error: Error) => {
 };
 
 export function ErrorCapture() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (_: any, __: string, descriptor: PropertyDescriptor) => {
     const method = descriptor.value;
     descriptor.value = async function () {
       try {
+        // eslint-disable-next-line prefer-rest-params
         return await method.apply(this, arguments);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         return errorHandler(e);
       }

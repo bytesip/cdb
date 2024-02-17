@@ -20,6 +20,6 @@ export const TastingSchema = /* GraphQL */ `
     updatedAt: DateTimeISO!
     # NOTE: relations
     # NOTE: reverse relations
-    beans: [Bean]
+    beans: [Bean!]
   }
 `;

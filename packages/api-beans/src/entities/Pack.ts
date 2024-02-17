@@ -15,7 +15,7 @@ export const PackSchema = /* GraphQL */ `
     updatedAt: DateTimeISO!
     # NOTE: relations
     # NOTE: reverse relations
-    beans: [Bean]
-    purchases: [Purchase]
+    beans: [Bean!]
+    purchases: [Purchase!]
   }
 `;

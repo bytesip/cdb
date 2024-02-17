@@ -28,7 +28,7 @@ async function execute(): Promise<void> {
   const PATH = '/graphql';
   const PORT = 4010;
 
-  // FIXME: don't use any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- FIXME: Do not use any as a type annotation
   const server = createYoga<any, any>({
     graphqlEndpoint: PATH,
     schema,
