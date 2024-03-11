@@ -2,7 +2,9 @@ import {PrismaClient, Prisma} from '@cdb/prisma';
 import {Service, Inject} from 'typedi';
 
 import {IRoastLevel} from '@/.generated/graphql';
+import {ErrorCapture} from '@/graphql/error';
 
+@ErrorCapture
 @Service('roastLevelRepository')
 export class RoastLevelRepository {
   @Inject('prisma')

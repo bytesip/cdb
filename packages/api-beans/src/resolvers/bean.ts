@@ -6,18 +6,29 @@ export const beanResolverDefs = /* GraphQL */ `
     description: String
     origin: CreateOriginInput
   }
-
+  union CreateBeanResults = Bean | ConflictError
   type Mutation {
-    createBean(input: CreateBeanInput!): Bean!
+    createBean(input: CreateBeanInput!): CreateBeanResults!
   }
 
+  union BeanResults = Bean | NotFoundError
   type Query {
-    bean(beanId: UUID!): Bean!
-    beans: [Bean]!
+    bean(beanId: UUID!): BeanResults!
+    beans: [BeanResults]!
   }
 `;
 
 export const beanResolvers: IResolvers = {
+  BeanResults: {
+    __resolveType: obj => {
+      return obj.__typename ?? 'Bean';
+    },
+  },
+  CreateBeanResults: {
+    __resolveType: obj => {
+      return obj.__typename ?? 'Bean';
+    },
+  },
   Query: {
     bean: async (_, {beanId}, {services: {beanService}}) => {
       return beanService.getBeanById(beanId);

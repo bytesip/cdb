@@ -34,7 +34,8 @@ class GraphQLError implements IGraphQlError {
   }
 }
 
-class NotFoundError extends GraphQLError implements INotFoundError {
+class NotFoundError extends GraphQLError implements INotFoundError, Error {
+  name: string = 'NotFoundError';
   entity?: string | null | undefined;
   id?: string | null | undefined;
 
@@ -46,6 +47,7 @@ class NotFoundError extends GraphQLError implements INotFoundError {
 }
 
 class ConflictError extends GraphQLError implements IConflictError {
+  name: string = 'ConflictError';
   constructor(code: string, message: string) {
     super(code, message);
   }
@@ -66,7 +68,7 @@ const errorHandler = (error: Error) => {
       'prisma has been ended up conflict status'
     );
     return {
-      __typename: 'ConflictError',
+      __typename: error.name,
       ...error,
     };
   }
@@ -74,18 +76,21 @@ const errorHandler = (error: Error) => {
   throw error;
 };
 
-export function ErrorCapture() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (_: any, __: string, descriptor: PropertyDescriptor) => {
-    const method = descriptor.value;
-    descriptor.value = async function () {
+export function ErrorCapture<T extends {new (...args: unknown[]): object}>(
+  constructor: T
+) {
+  const methods = Object.getOwnPropertyNames(constructor.prototype).filter(
+    name => name !== 'constructor'
+  );
+
+  methods.forEach(method => {
+    const original = constructor.prototype[method];
+    constructor.prototype[method] = async function (...args: unknown[]) {
       try {
-        // eslint-disable-next-line prefer-rest-params
-        return await method.apply(this, arguments);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        return errorHandler(e);
+        return await original.apply(this, args);
+      } catch (error) {
+        return errorHandler(error);
       }
     };
-  };
+  });
 }

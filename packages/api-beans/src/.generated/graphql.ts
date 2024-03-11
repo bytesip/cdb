@@ -128,6 +128,8 @@ export type IBean = IBaseBean & {
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
+export type IBeanResults = IBean | INotFoundError;
+
 export type IConflictError = IGraphQlError & {
   __typename?: 'ConflictError';
   code: Scalars['String']['output'];
@@ -139,6 +141,8 @@ export type ICreateBeanInput = {
   name: Scalars['String']['input'];
   origin?: InputMaybe<ICreateOriginInput>;
 };
+
+export type ICreateBeanResults = IBean | IConflictError;
 
 export type ICreateOriginInput = {
   description?: InputMaybe<Scalars['String']['input']>;
@@ -168,7 +172,7 @@ export type IGraphQlError = {
 
 export type IMutation = {
   __typename?: 'Mutation';
-  createBean: IBean;
+  createBean: ICreateBeanResults;
   createOrigin: ICreateOriginResults;
 };
 
@@ -200,6 +204,13 @@ export type IOrigin = IBaseOrigin & {
   longitude?: Maybe<Scalars['Longitude']['output']>;
   name: Scalars['String']['output'];
   updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+export type IOriginResults = INotFoundError | IOrigin;
+
+export type IOriginWhereInput = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  q?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IPack = IBasePack & {
@@ -239,10 +250,11 @@ export type IPurchase = IBasePurchase & {
 
 export type IQuery = {
   __typename?: 'Query';
-  bean: IBean;
-  beans: Array<Maybe<IBean>>;
-  origin: IOrigin;
+  bean: IBeanResults;
+  beans: Array<Maybe<IBeanResults>>;
+  origin: IOriginResults;
   origins: Array<Maybe<IOrigin>>;
+  searchOrigins: Array<Maybe<IOrigin>>;
 };
 
 
@@ -253,6 +265,11 @@ export type IQueryBeanArgs = {
 
 export type IQueryOriginArgs = {
   originId: Scalars['UUID']['input'];
+};
+
+
+export type IQuerySearchOriginsArgs = {
+  where: IOriginWhereInput;
 };
 
 export type IRoastLevel = IBaseBeanRoastLevel & {
@@ -355,7 +372,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of union types */
 export type IResolversUnionTypes<RefType extends Record<string, unknown>> = {
+  BeanResults: ( IBean ) | ( INotFoundError );
+  CreateBeanResults: ( IBean ) | ( IConflictError );
   CreateOriginResults: ( IConflictError ) | ( IOrigin );
+  OriginResults: ( INotFoundError ) | ( IOrigin );
 };
 
 /** Mapping of interface types */
@@ -384,9 +404,11 @@ export type IResolversTypes = {
   BaseShop: ResolverTypeWrapper<IResolversInterfaceTypes<IResolversTypes>['BaseShop']>;
   BaseTasting: ResolverTypeWrapper<IResolversInterfaceTypes<IResolversTypes>['BaseTasting']>;
   Bean: ResolverTypeWrapper<IBean>;
+  BeanResults: ResolverTypeWrapper<IResolversUnionTypes<IResolversTypes>['BeanResults']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   ConflictError: ResolverTypeWrapper<IConflictError>;
   CreateBeanInput: ICreateBeanInput;
+  CreateBeanResults: ResolverTypeWrapper<IResolversUnionTypes<IResolversTypes>['CreateBeanResults']>;
   CreateOriginInput: ICreateOriginInput;
   CreateOriginResults: ResolverTypeWrapper<IResolversUnionTypes<IResolversTypes>['CreateOriginResults']>;
   DateTimeISO: ResolverTypeWrapper<Scalars['DateTimeISO']['output']>;
@@ -398,6 +420,8 @@ export type IResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   NotFoundError: ResolverTypeWrapper<INotFoundError>;
   Origin: ResolverTypeWrapper<IOrigin>;
+  OriginResults: ResolverTypeWrapper<IResolversUnionTypes<IResolversTypes>['OriginResults']>;
+  OriginWhereInput: IOriginWhereInput;
   Pack: ResolverTypeWrapper<IPack>;
   ProcessingMethod: ResolverTypeWrapper<IProcessingMethod>;
   Purchase: ResolverTypeWrapper<IPurchase>;
@@ -422,9 +446,11 @@ export type IResolversParentTypes = {
   BaseShop: IResolversInterfaceTypes<IResolversParentTypes>['BaseShop'];
   BaseTasting: IResolversInterfaceTypes<IResolversParentTypes>['BaseTasting'];
   Bean: IBean;
+  BeanResults: IResolversUnionTypes<IResolversParentTypes>['BeanResults'];
   Boolean: Scalars['Boolean']['output'];
   ConflictError: IConflictError;
   CreateBeanInput: ICreateBeanInput;
+  CreateBeanResults: IResolversUnionTypes<IResolversParentTypes>['CreateBeanResults'];
   CreateOriginInput: ICreateOriginInput;
   CreateOriginResults: IResolversUnionTypes<IResolversParentTypes>['CreateOriginResults'];
   DateTimeISO: Scalars['DateTimeISO']['output'];
@@ -436,6 +462,8 @@ export type IResolversParentTypes = {
   Mutation: {};
   NotFoundError: INotFoundError;
   Origin: IOrigin;
+  OriginResults: IResolversUnionTypes<IResolversParentTypes>['OriginResults'];
+  OriginWhereInput: IOriginWhereInput;
   Pack: IPack;
   ProcessingMethod: IProcessingMethod;
   Purchase: IPurchase;
@@ -558,10 +586,18 @@ export type IBeanResolvers<ContextType = Context, ParentType extends IResolversP
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type IBeanResultsResolvers<ContextType = Context, ParentType extends IResolversParentTypes['BeanResults'] = IResolversParentTypes['BeanResults']> = {
+  __resolveType: TypeResolveFn<'Bean' | 'NotFoundError', ParentType, ContextType>;
+};
+
 export type IConflictErrorResolvers<ContextType = Context, ParentType extends IResolversParentTypes['ConflictError'] = IResolversParentTypes['ConflictError']> = {
   code?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   message?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ICreateBeanResultsResolvers<ContextType = Context, ParentType extends IResolversParentTypes['CreateBeanResults'] = IResolversParentTypes['CreateBeanResults']> = {
+  __resolveType: TypeResolveFn<'Bean' | 'ConflictError', ParentType, ContextType>;
 };
 
 export type ICreateOriginResultsResolvers<ContextType = Context, ParentType extends IResolversParentTypes['CreateOriginResults'] = IResolversParentTypes['CreateOriginResults']> = {
@@ -598,7 +634,7 @@ export interface ILongitudeScalarConfig extends GraphQLScalarTypeConfig<IResolve
 }
 
 export type IMutationResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
-  createBean?: Resolver<IResolversTypes['Bean'], ParentType, ContextType, RequireFields<IMutationCreateBeanArgs, 'input'>>;
+  createBean?: Resolver<IResolversTypes['CreateBeanResults'], ParentType, ContextType, RequireFields<IMutationCreateBeanArgs, 'input'>>;
   createOrigin?: Resolver<IResolversTypes['CreateOriginResults'], ParentType, ContextType, RequireFields<IMutationCreateOriginArgs, 'input'>>;
 };
 
@@ -620,6 +656,10 @@ export type IOriginResolvers<ContextType = Context, ParentType extends IResolver
   name?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<IResolversTypes['DateTimeISO'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type IOriginResultsResolvers<ContextType = Context, ParentType extends IResolversParentTypes['OriginResults'] = IResolversParentTypes['OriginResults']> = {
+  __resolveType: TypeResolveFn<'NotFoundError' | 'Origin', ParentType, ContextType>;
 };
 
 export type IPackResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Pack'] = IResolversParentTypes['Pack']> = {
@@ -658,10 +698,11 @@ export type IPurchaseResolvers<ContextType = Context, ParentType extends IResolv
 };
 
 export type IQueryResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
-  bean?: Resolver<IResolversTypes['Bean'], ParentType, ContextType, RequireFields<IQueryBeanArgs, 'beanId'>>;
-  beans?: Resolver<Array<Maybe<IResolversTypes['Bean']>>, ParentType, ContextType>;
-  origin?: Resolver<IResolversTypes['Origin'], ParentType, ContextType, RequireFields<IQueryOriginArgs, 'originId'>>;
+  bean?: Resolver<IResolversTypes['BeanResults'], ParentType, ContextType, RequireFields<IQueryBeanArgs, 'beanId'>>;
+  beans?: Resolver<Array<Maybe<IResolversTypes['BeanResults']>>, ParentType, ContextType>;
+  origin?: Resolver<IResolversTypes['OriginResults'], ParentType, ContextType, RequireFields<IQueryOriginArgs, 'originId'>>;
   origins?: Resolver<Array<Maybe<IResolversTypes['Origin']>>, ParentType, ContextType>;
+  searchOrigins?: Resolver<Array<Maybe<IResolversTypes['Origin']>>, ParentType, ContextType, RequireFields<IQuerySearchOriginsArgs, 'where'>>;
 };
 
 export type IRoastLevelResolvers<ContextType = Context, ParentType extends IResolversParentTypes['RoastLevel'] = IResolversParentTypes['RoastLevel']> = {
@@ -714,7 +755,9 @@ export type IResolvers<ContextType = Context> = {
   BaseShop?: IBaseShopResolvers<ContextType>;
   BaseTasting?: IBaseTastingResolvers<ContextType>;
   Bean?: IBeanResolvers<ContextType>;
+  BeanResults?: IBeanResultsResolvers<ContextType>;
   ConflictError?: IConflictErrorResolvers<ContextType>;
+  CreateBeanResults?: ICreateBeanResultsResolvers<ContextType>;
   CreateOriginResults?: ICreateOriginResultsResolvers<ContextType>;
   DateTimeISO?: GraphQLScalarType;
   FlavorProfile?: IFlavorProfileResolvers<ContextType>;
@@ -724,6 +767,7 @@ export type IResolvers<ContextType = Context> = {
   Mutation?: IMutationResolvers<ContextType>;
   NotFoundError?: INotFoundErrorResolvers<ContextType>;
   Origin?: IOriginResolvers<ContextType>;
+  OriginResults?: IOriginResultsResolvers<ContextType>;
   Pack?: IPackResolvers<ContextType>;
   ProcessingMethod?: IProcessingMethodResolvers<ContextType>;
   Purchase?: IPurchaseResolvers<ContextType>;

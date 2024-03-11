@@ -1,7 +1,9 @@
 import {Service, Inject} from 'typedi';
 import {IBean, ICreateBeanInput} from '@/.generated/graphql';
 import {BeanRepository} from '@/repositories/beanRepository';
+import {ErrorCapture} from '@/graphql/error';
 
+@ErrorCapture
 @Service('beanService')
 export class BeanService {
   @Inject('beanRepository')

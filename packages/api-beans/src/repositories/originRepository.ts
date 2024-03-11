@@ -4,6 +4,7 @@ import {Service, Inject} from 'typedi';
 import {ICreateOriginInput, IOrigin} from '@/.generated/graphql';
 import {ErrorCapture} from '@/graphql/error';
 
+@ErrorCapture
 @Service('originRepository')
 export class OriginRepository {
   @Inject('prisma')

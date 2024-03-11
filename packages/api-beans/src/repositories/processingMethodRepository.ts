@@ -1,8 +1,11 @@
 import {PrismaClient, Prisma} from '@cdb/prisma';
 import {Service, Inject} from 'typedi';
 
+import {ErrorCapture} from '@/graphql/error';
+
 import {IProcessingMethod} from '@/.generated/graphql';
 
+@ErrorCapture
 @Service('processingMethodRepository')
 export class ProcessingMethodRepository {
   @Inject('prisma')

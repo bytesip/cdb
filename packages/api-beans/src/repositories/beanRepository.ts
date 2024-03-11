@@ -1,8 +1,10 @@
 import {PrismaClient, Prisma} from '@cdb/prisma';
 import {Service, Inject} from 'typedi';
+import {ErrorCapture} from '@/graphql/error';
 
 import {IBean, ICreateBeanInput} from '@/.generated/graphql';
 
+@ErrorCapture
 @Service('beanRepository')
 export class BeanRepository {
   @Inject('prisma')
