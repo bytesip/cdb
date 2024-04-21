@@ -1,0 +1,17 @@
+{
+  "extends": "./node_modules/@cdb/config/tsconfig.base.json",
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "./stories/**/*.stories.ts",
+    "./stories/**/*.stories.tsx"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  }
+}

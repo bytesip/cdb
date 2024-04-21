@@ -1,0 +1,32 @@
+{
+  "name": "@cdb/ui",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./tailwind.config.js": "./tailwind.config.js",
+    "./postcss.config.js": "./postcss.config.js"
+  },
+  "scripts": {
+    "fmt": "prettier --write --cache --ignore-path .gitignore './src/**/*.{ts,tsx}'",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "dependencies": {
+    "flowbite": "^2.3.0",
+    "flowbite-react": "^0.8.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@cdb/config": "workspace:*",
+    "@types/react": "^18.2.74",
+    "@types/react-dom": "^18.2.24",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3"
+  }
+}
